@@ -24,7 +24,7 @@
      SOUND_EFFECT_VOLUME — loudness of the round fanfare
    ========================================================= */
 
-const MUSIC_FILE = "assets/audio/careless-whisper.mp3";
+const MUSIC_FILE = "assets/audio/game-show-theme.mp3";
 
 const MUSIC_VOLUME = 0.35;
 const MUSIC_DUCKED_VOLUME = 0.02; // barely audible — set to 0 for full silence
