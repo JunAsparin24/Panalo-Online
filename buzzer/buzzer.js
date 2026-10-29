@@ -66,6 +66,7 @@ async function checkIn() {
     }
     if (!response.ok) throw new Error(response.status);
     latestState = await response.json();
+    applyTheme(cleanTheme(latestState.theme)); // theme.js — the host's theme color
     connectionBanner.hidden = true;
     render();
   } catch (error) {

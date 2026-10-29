@@ -2,7 +2,7 @@
    buzzer-host.js — The host's side of the phone buzzers.
 
    This only switches on when the game is opened through the
-   PANALO! server (the website — see server/server.js). Opened
+   Trivia Night server (the website — see server/server.js). Opened
    as a plain file, the game works the same, just without buzzers.
 
    Every game on the website is its own ROOM with a short code.
@@ -232,6 +232,7 @@ async function connectToBuzzerServer() {
   document.getElementById("home-player-link").hidden = false;
 
   sendTeamsToBuzzer();
+  sendThemeToBuzzer();
   onTeamsChanged(sendTeamsToBuzzer); // teams.js — keep the phones' team list up to date
   renderBuzzerUi(false);
   unlockBuzzers(); // clears any old buzz; stays closed until a question opens
@@ -247,6 +248,7 @@ async function reopenRoom() {
     buzzerRoom = await openRoom();
     qrCodeMadeFor = "";
     sendTeamsToBuzzer();
+    sendThemeToBuzzer();
     unlockBuzzers();
     showHostScreenInfo();
   } catch (error) {
@@ -296,6 +298,12 @@ function sendTeamsToBuzzer() {
   if (!isBuzzerConnected) return;
   const teamList = getTeams().map(({ id, name, color }) => ({ id, name, color }));
   buzzerRequest("/api/teams", { method: "POST", body: JSON.stringify(teamList) }).catch(() => {});
+}
+
+// The theme color, so the players' and host's phones match the game (theme-picker.js)
+function sendThemeToBuzzer() {
+  if (!isBuzzerConnected) return;
+  buzzerRequest("/api/theme", { method: "POST", body: JSON.stringify(gameTheme || {}) }).catch(() => {});
 }
 
 /* ---------- On screen ---------- */

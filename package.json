@@ -1,8 +1,8 @@
 {
-  "name": "panalo",
+  "name": "jtrivia",
   "version": "1.0.0",
   "private": true,
-  "description": "PANALO! trivia game show with phone buzzers",
+  "description": "Trivia Night: a game show with phone buzzers",
   "scripts": {
     "start": "node server/server.js"
   },

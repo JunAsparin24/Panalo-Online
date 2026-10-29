@@ -1,0 +1,56 @@
+/* =========================================================
+   theme.css — The game's color theme, shared by the game,
+   the players' buzzer page and the host's phone.
+
+   Every red in the game is one of the --t-… colors below
+   (the name is the original red, e.g. --t-711a26 was #711a26).
+   They're all worked out from the theme color the host picks on
+   the Set Up Game screen (theme.js sets these three):
+     --theme-hue-shift   how far round the color wheel to turn
+     --theme-saturation  1 = as colorful as the red, 0 = grey
+     --theme-lighten / --theme-darken   brighter or darker
+   With the defaults below, everything is the original red.
+
+   Reds that MEAN something (the ✗ button, "time's up", error
+   messages) aren't in here, so they stay red whatever the theme.
+   ========================================================= */
+
+:root {
+  --theme-hue-shift: 0deg;
+  --theme-saturation: 1;
+  --theme-lighten: 0%;
+  --theme-darken: 0%;
+
+  --t-0c0203: hsl(calc(354.0deg + var(--theme-hue-shift)) calc(71.4% * var(--theme-saturation)) calc(2.7% + var(--theme-lighten) * 1.337 - var(--theme-darken) * 0.101)); /* was #0c0203 */
+  --t-0f0204: hsl(calc(350.8deg + var(--theme-hue-shift)) calc(76.5% * var(--theme-saturation)) calc(3.3% + var(--theme-lighten) * 1.329 - var(--theme-darken) * 0.122)); /* was #0f0204 */
+  --t-1a0406: hsl(calc(354.5deg + var(--theme-hue-shift)) calc(73.3% * var(--theme-saturation)) calc(5.9% + var(--theme-lighten) * 1.294 - var(--theme-darken) * 0.216)); /* was #1a0406 */
+  --t-1c0307: hsl(calc(350.4deg + var(--theme-hue-shift)) calc(80.6% * var(--theme-saturation)) calc(6.1% + var(--theme-lighten) * 1.291 - var(--theme-darken) * 0.223)); /* was #1c0307 */
+  --t-23060a: hsl(calc(351.7deg + var(--theme-hue-shift)) calc(70.7% * var(--theme-saturation)) calc(8.0% + var(--theme-lighten) * 1.264 - var(--theme-darken) * 0.295)); /* was #23060a */
+  --t-29050a: hsl(calc(351.7deg + var(--theme-hue-shift)) calc(78.3% * var(--theme-saturation)) calc(9.0% + var(--theme-lighten) * 1.251 - var(--theme-darken) * 0.331)); /* was #29050a */
+  --t-2a060b: hsl(calc(351.7deg + var(--theme-hue-shift)) calc(75.0% * var(--theme-saturation)) calc(9.4% + var(--theme-lighten) * 1.245 - var(--theme-darken) * 0.345)); /* was #2a060b */
+  --t-2b080d: hsl(calc(351.4deg + var(--theme-hue-shift)) calc(68.6% * var(--theme-saturation)) calc(10.0% + var(--theme-lighten) * 1.237 - var(--theme-darken) * 0.367)); /* was #2b080d */
+  --t-2e070c: hsl(calc(352.3deg + var(--theme-hue-shift)) calc(73.6% * var(--theme-saturation)) calc(10.4% + var(--theme-lighten) * 1.232 - var(--theme-darken) * 0.381)); /* was #2e070c */
+  --t-2f060b: hsl(calc(352.7deg + var(--theme-hue-shift)) calc(77.4% * var(--theme-saturation)) calc(10.4% + var(--theme-lighten) * 1.232 - var(--theme-darken) * 0.381)); /* was #2f060b */
+  --t-36080e: hsl(calc(352.2deg + var(--theme-hue-shift)) calc(74.2% * var(--theme-saturation)) calc(12.2% + var(--theme-lighten) * 1.207 - var(--theme-darken) * 0.446)); /* was #36080e */
+  --t-301418: hsl(calc(351.4deg + var(--theme-hue-shift)) calc(41.2% * var(--theme-saturation)) calc(13.3% + var(--theme-lighten) * 1.191 - var(--theme-darken) * 0.489)); /* was #301418 */
+  --t-390c12: hsl(calc(352.0deg + var(--theme-hue-shift)) calc(65.2% * var(--theme-saturation)) calc(13.5% + var(--theme-lighten) * 1.189 - var(--theme-darken) * 0.496)); /* was #390c12 */
+  --t-3b0c12: hsl(calc(352.3deg + var(--theme-hue-shift)) calc(66.2% * var(--theme-saturation)) calc(13.9% + var(--theme-lighten) * 1.183 - var(--theme-darken) * 0.511)); /* was #3b0c12 */
+  --t-420b13: hsl(calc(351.3deg + var(--theme-hue-shift)) calc(71.4% * var(--theme-saturation)) calc(15.1% + var(--theme-lighten) * 1.167 - var(--theme-darken) * 0.554)); /* was #420b13 */
+  --t-4a0e16: hsl(calc(352.0deg + var(--theme-hue-shift)) calc(68.2% * var(--theme-saturation)) calc(17.3% + var(--theme-lighten) * 1.137 - var(--theme-darken) * 0.633)); /* was #4a0e16 */
+  --t-500f18: hsl(calc(351.7deg + var(--theme-hue-shift)) calc(68.4% * var(--theme-saturation)) calc(18.6% + var(--theme-lighten) * 1.119 - var(--theme-darken) * 0.684)); /* was #500f18 */
+  --t-530e17: hsl(calc(352.2deg + var(--theme-hue-shift)) calc(71.1% * var(--theme-saturation)) calc(19.0% + var(--theme-lighten) * 1.113 - var(--theme-darken) * 0.698)); /* was #530e17 */
+  --t-5a1018: hsl(calc(353.5deg + var(--theme-hue-shift)) calc(69.8% * var(--theme-saturation)) calc(20.8% + var(--theme-lighten) * 1.089 - var(--theme-darken) * 0.763)); /* was #5a1018 */
+  --t-620e19: hsl(calc(352.1deg + var(--theme-hue-shift)) calc(75.0% * var(--theme-saturation)) calc(22.0% + var(--theme-lighten) * 1.073 - var(--theme-darken) * 0.806)); /* was #620e19 */
+  --t-5e151e: hsl(calc(352.6deg + var(--theme-hue-shift)) calc(63.5% * var(--theme-saturation)) calc(22.5% + var(--theme-lighten) * 1.065 - var(--theme-darken) * 0.827)); /* was #5e151e */
+  --t-61131d: hsl(calc(352.3deg + var(--theme-hue-shift)) calc(67.2% * var(--theme-saturation)) calc(22.7% + var(--theme-lighten) * 1.062 - var(--theme-darken) * 0.835)); /* was #61131d */
+  --t-64151f: hsl(calc(352.4deg + var(--theme-hue-shift)) calc(65.3% * var(--theme-saturation)) calc(23.7% + var(--theme-lighten) * 1.048 - var(--theme-darken) * 0.871)); /* was #64151f */
+  --t-711a26: hsl(calc(351.7deg + var(--theme-hue-shift)) calc(62.6% * var(--theme-saturation)) calc(27.3% + var(--theme-lighten) * 1.000 - var(--theme-darken) * 1.000)); /* was #711a26 */
+  --t-5c2f35: hsl(calc(352.0deg + var(--theme-hue-shift)) calc(32.4% * var(--theme-saturation)) calc(27.3% + var(--theme-lighten) * 1.000 - var(--theme-darken) * 1.000)); /* was #5c2f35 */
+  --t-7e1926: hsl(calc(352.3deg + var(--theme-hue-shift)) calc(66.9% * var(--theme-saturation)) calc(29.6% + var(--theme-lighten) * 0.968 - var(--theme-darken) * 1.087)); /* was #7e1926 */
+  --t-7e1e2b: hsl(calc(351.9deg + var(--theme-hue-shift)) calc(61.5% * var(--theme-saturation)) calc(30.6% + var(--theme-lighten) * 0.954 - var(--theme-darken) * 1.123)); /* was #7e1e2b */
+  --t-841826: hsl(calc(352.2deg + var(--theme-hue-shift)) calc(69.2% * var(--theme-saturation)) calc(30.6% + var(--theme-lighten) * 0.954 - var(--theme-darken) * 1.123)); /* was #841826 */
+  --t-852431: hsl(calc(352.0deg + var(--theme-hue-shift)) calc(57.4% * var(--theme-saturation)) calc(33.1% + var(--theme-lighten) * 0.919 - var(--theme-darken) * 1.216)); /* was #852431 */
+  --t-932634: hsl(calc(352.3deg + var(--theme-hue-shift)) calc(58.9% * var(--theme-saturation)) calc(36.3% + var(--theme-lighten) * 0.876 - var(--theme-darken) * 1.331)); /* was #932634 */
+  --t-a53342: hsl(calc(352.1deg + var(--theme-hue-shift)) calc(52.8% * var(--theme-saturation)) calc(42.4% + var(--theme-lighten) * 0.792 - var(--theme-darken) * 1.554)); /* was #a53342 */
+  --t-dcb5ba: hsl(calc(352.3deg + var(--theme-hue-shift)) calc(35.8% * var(--theme-saturation)) calc(78.6% + var(--theme-lighten) * 0.294 - var(--theme-darken) * 2.885)); /* was #dcb5ba */
+}

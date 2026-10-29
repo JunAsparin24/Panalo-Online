@@ -5,13 +5,13 @@
 
 :root {
   --team-color: #f4c76a;
-  --color-bg: #711a26;
-  --color-green: #61131d;
-  --color-green-deep: #420b13;
+  --color-bg: var(--t-711a26);
+  --color-green: var(--t-61131d);
+  --color-green-deep: var(--t-420b13);
   --color-gold: #f4c76a;
   --color-gold-light: #ffe3a3;
   --color-cream: #fff4dc;
-  --color-sage: #dcb5ba;
+  --color-sage: var(--t-dcb5ba);
   --font-display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
   --font-body: "Montserrat", "Segoe UI", system-ui, sans-serif;
   color-scheme: dark;
@@ -41,8 +41,8 @@ body {
   font-family: var(--font-body);
   color: var(--color-cream);
   background:
-    radial-gradient(ellipse at 20% 0%, #852431 0%, transparent 60%),
-    linear-gradient(180deg, var(--color-bg), #4a0e16);
+    radial-gradient(ellipse at 20% 0%, var(--t-852431) 0%, transparent 60%),
+    linear-gradient(180deg, var(--color-bg), var(--t-4a0e16));
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
@@ -62,13 +62,13 @@ button {
   padding: 14px 0;
 }
 
-/* PANALO! in the game's lettering (small, so just gold + green shadow) */
+/* Trivia Night in the game's lettering (small, so just gold + green shadow) */
 .top-bar__title {
   font-family: "Sancreek", Georgia, serif;
   font-size: 1.5rem;
   letter-spacing: 0.04em;
   color: var(--color-gold);
-  text-shadow: 2px 2px 0 var(--color-green-deep), 3px 3px 0 #2a060b;
+  text-shadow: 2px 2px 0 var(--color-green-deep), 3px 3px 0 var(--t-2a060b);
 }
 
 .top-bar__team {
@@ -81,7 +81,7 @@ button {
   white-space: nowrap;
   text-overflow: ellipsis;
   cursor: pointer;
-  background: rgba(66, 11, 19, 0.8);
+  background: color-mix(in srgb, var(--t-420b13) 80%, transparent);
   border: 1px solid var(--team-color);
   border-radius: 999px;
 }
@@ -179,7 +179,7 @@ button {
 
 /* Ready: glowing, in the team's colour */
 .buzz-button[data-mode="ready"] {
-  color: #2e070c;
+  color: var(--t-2e070c);
   /* plain versions first, for older phones that don't understand color-mix() */
   background: var(--team-color);
   box-shadow: 0 0 60px var(--team-color), 0 20px 40px rgba(0, 0, 0, 0.5);
@@ -198,7 +198,7 @@ button {
 }
 
 .buzz-button[data-mode="sending"] {
-  color: #2e070c;
+  color: var(--t-2e070c);
   background: var(--team-color);
   border: 6px solid #fff;
   transform: scale(0.95);
@@ -225,8 +225,8 @@ button {
 .buzz-button[data-mode="locked"] {
   color: rgba(255, 244, 220, 0.7);
   cursor: not-allowed;
-  background: radial-gradient(circle at 50% 35%, #5c2f35 0%, #301418 100%);
-  border: 6px solid rgba(220, 181, 186, 0.25);
+  background: radial-gradient(circle at 50% 35%, var(--t-5c2f35) 0%, var(--t-301418) 100%);
+  border: 6px solid color-mix(in srgb, var(--t-dcb5ba) 25%, transparent);
   box-shadow: none;
 }
 
@@ -316,7 +316,7 @@ button {
   font-family: "Sancreek", Georgia, serif;
   font-size: 2.6rem;
   color: var(--color-gold);
-  text-shadow: 2px 2px 0 var(--color-green-deep), 3px 3px 0 #2a060b;
+  text-shadow: 2px 2px 0 var(--color-green-deep), 3px 3px 0 var(--t-2a060b);
 }
 
 .phone-button {
@@ -327,7 +327,7 @@ button {
   letter-spacing: 0.06em;
   color: var(--color-cream);
   cursor: pointer;
-  background: linear-gradient(180deg, #a53342, #7e1926 55%, #620e19);
+  background: linear-gradient(180deg, var(--t-a53342), var(--t-7e1926) 55%, var(--t-620e19));
   border: 2px solid var(--color-gold);
   border-radius: 999px;
 }

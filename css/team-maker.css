@@ -11,14 +11,14 @@
   letter-spacing: 0.08em;
   color: var(--color-gold-light);
   cursor: pointer;
-  background: rgba(66, 11, 19, 0.55);
+  background: color-mix(in srgb, var(--t-420b13) 55%, transparent);
   border: 1px solid var(--color-border-gold);
   border-radius: 999px;
   transition: background 0.2s ease, transform 0.2s var(--ease-out);
 }
 
 .team-maker-open:hover {
-  background: rgba(66, 11, 19, 0.85);
+  background: color-mix(in srgb, var(--t-420b13) 85%, transparent);
   transform: translateY(-2px);
 }
 
@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: radial-gradient(ellipse at center, rgba(66, 11, 19, 0.75), rgba(12, 2, 3, 0.92));
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--t-420b13) 75%, transparent), color-mix(in srgb, var(--t-0c0203) 92%, transparent));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -49,7 +49,7 @@
   overflow-y: auto;
   padding: clamp(20px, 4vh, 40px) clamp(18px, 4vw, 48px);
   border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, rgba(126, 30, 43, 0.96), rgba(100, 21, 31, 0.98));
+  background: linear-gradient(160deg, color-mix(in srgb, var(--t-7e1e2b) 96%, transparent), color-mix(in srgb, var(--t-64151f) 98%, transparent));
   border: 1px solid var(--color-gold);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 }
@@ -91,7 +91,7 @@
   line-height: 1.5;
   color: var(--color-cream);
   resize: vertical;
-  background: rgba(28, 3, 7, 0.55);
+  background: color-mix(in srgb, var(--t-1c0307) 55%, transparent);
   border: 1px solid var(--color-border-sage);
   border-radius: var(--radius-md);
 }
@@ -103,7 +103,7 @@
 }
 
 .team-maker__names::placeholder {
-  color: rgba(220, 181, 186, 0.45);
+  color: color-mix(in srgb, var(--t-dcb5ba) 45%, transparent);
 }
 
 .team-maker__size {
@@ -129,7 +129,7 @@
   font-size: 1.6rem;
   color: var(--color-gold-light);
   text-align: center;
-  background: rgba(28, 3, 7, 0.55);
+  background: color-mix(in srgb, var(--t-1c0307) 55%, transparent);
   border: none;
 }
 
@@ -139,7 +139,7 @@
 }
 
 .team-maker__stepper button:hover {
-  background: rgba(66, 11, 19, 0.9);
+  background: color-mix(in srgb, var(--t-420b13) 90%, transparent);
 }
 
 .team-maker__stepper input {
@@ -166,7 +166,7 @@
 .team-maker__team {
   padding: 12px 14px;
   border-radius: var(--radius-md);
-  background: rgba(28, 3, 7, 0.55);
+  background: color-mix(in srgb, var(--t-1c0307) 55%, transparent);
   border-top: 5px solid var(--team-color);
   animation: team-card-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) var(--card-delay, 0ms) backwards;
 }

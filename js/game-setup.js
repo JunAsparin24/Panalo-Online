@@ -2,10 +2,12 @@
    game-setup.js — The SET UP GAME screen, where the host
    types in all the categories and questions.
 
-   Three tabs:
+   Four tabs:
      ROUND 1 / ROUND 2  five categories × five questions + answers
      FINAL WAGER        any number of categories, each with one or
                         more questions (one is picked at random)
+     THEME              the color wheel: the color of the whole game
+                        and the phones (theme-picker.js)
 
    Everything saves by itself as you type (questions.js keeps it
    in this browser). SAVE TO FILE / LOAD FILE move a whole game
@@ -29,13 +31,14 @@ const setupPictureInput = document.getElementById("game-setup-picture-file");
 const SETUP_CONFIRM_MS = 3000; // how long a "Sure?" button waits for the second click
 const SETUP_PICTURE_MAX_SIZE = 800; // pictures are shrunk to this many pixels on their longest side
 
-let gameSetupTab = "round1"; // "round1", "round2" or "finalWager"
+let gameSetupTab = "round1"; // "round1", "round2", "finalWager" or "theme"
 let gameSetupStatusTimer = null;
 let setupPictureTarget = null; // the question whose "Add picture" button was clicked
 
 const SETUP_HINTS = {
   round1: "Five categories, five questions each. Type each category's name at the top of its column. Any question can have a picture: click Add picture, drag one in, or paste one.",
   round2: "Same as Round 1 (pictures too), but every question is worth double.",
+  theme: "Pick a color for the whole game. Everything changes as you pick, so you can see how it looks.",
   finalWager: "One category is picked at random during the game, then one of its questions at random. Give each category at least one question.",
 };
 
@@ -85,6 +88,11 @@ function renderGameSetup() {
   });
   gameSetupHint.textContent = SETUP_HINTS[gameSetupTab];
 
+  // The THEME tab has its own panel (theme-picker.js) instead of boxes
+  const isTheme = gameSetupTab === "theme";
+  gameSetupBody.hidden = isTheme;
+  document.getElementById("game-setup-theme").hidden = !isTheme;
+
   gameSetupBody.innerHTML = "";
   gameSetupBody.scrollTop = 0;
   if (gameSetupTab === "round1") gameSetupBody.appendChild(buildBoardEditor(0));
@@ -106,10 +114,18 @@ function updateGameSetupTabCounts() {
       const empty = countEmptyBoardBoxes(name === "round1" ? 0 : 1);
       isDone = empty === 0;
       text = isDone ? "✓ Ready" : `${empty} empty`;
-    } else {
+    } else if (name === "finalWager") {
       const total = finalWagerQuestions.reduce((sum, category) => sum + category.questions.length, 0);
       isDone = total > 0;
       text = isDone ? `${total} question${total === 1 ? "" : "s"}` : "Skipped";
+    } else {
+      // THEME: a dot in the picked color (theme-picker.js)
+      count.textContent = "";
+      const swatch = document.createElement("span");
+      swatch.className = "game-setup__tab-swatch";
+      swatch.style.background = themeColorCss(gameTheme); // theme.js
+      count.append(swatch, gameTheme ? "Custom" : "Red");
+      return;
     }
 
     count.textContent = text;
@@ -469,7 +485,7 @@ function saveSetupToFile() {
   const file = new Blob([JSON.stringify(gameSetup, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(file);
-  link.download = "panalo-questions.json";
+  link.download = "trivia-night-questions.json";
   document.body.appendChild(link);
   link.click();
   link.remove();

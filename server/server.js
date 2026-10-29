@@ -1,5 +1,5 @@
 /* =========================================================
-   server.js — The PANALO! web server (runs on Render, or any
+   server.js — The Trivia Night web server (runs on Render, or any
    computer with Node.js: `npm start`, then open
    http://localhost:3000).
 
@@ -72,6 +72,10 @@ function createRoom() {
     commands: [],
     controlInfo: null,
 
+    // The host's theme color { hue, saturation, lightness } (null = the original red),
+    // so the phones match the game
+    theme: null,
+
     // Final Wager: amounts stay secret — phones only see WHO has locked in
     fw: { active: false, phase: "", category: "", maxes: {}, wagers: {} },
   };
@@ -128,6 +132,7 @@ function getPublicState(room) {
     blocked: room.blocked,
     players: countPlayers(room),
     finalWager: getFinalWagerState(room),
+    theme: room.theme,
     commandSeq: room.commandSeq, // the game fetches new host commands when this changes
   };
 }
@@ -139,7 +144,9 @@ function getPublicState(room) {
 const text = (value, maxLength) => String(value == null ? "" : value).slice(0, maxLength);
 const wholeNumber = (value) => Math.round(Number(value)) || 0;
 
-// Every handler gets { room, body, query, isHost } and returns [status, data]
+// Every handler gets { room, body, rawBody, query, isHost } and returns [status, data].
+// body is always an object ({} if nothing was sent); rawBody is exactly what was
+// sent, so "null" (e.g. no question open) stays null
 const routes = {
   // --- Players ------------------------------------------------------
   "GET /api/state": ({ room }) => [200, getPublicState(room)],
@@ -197,10 +204,20 @@ const routes = {
     return [200, getPublicState(room)];
   },
 
-  // The open question and its answer, for the host's phone (null = back on the board)
-  "POST /api/question": ({ room, body, isHost }) => {
+  // The theme color picked on the Set Up Game screen (null = the original red)
+  "POST /api/theme": ({ room, body, isHost }) => {
     if (!isHost) return forbidden();
-    room.hostQuestion = body && typeof body === "object" ? body : null;
+    const numbers = [body.hue, body.saturation, body.lightness].map(Number);
+    room.theme = numbers.every(Number.isFinite)
+      ? { hue: numbers[0], saturation: numbers[1], lightness: numbers[2] }
+      : null;
+    return [200, { ok: true }];
+  },
+
+  // The open question and its answer, for the host's phone (null = back on the board)
+  "POST /api/question": ({ room, rawBody, isHost }) => {
+    if (!isHost) return forbidden();
+    room.hostQuestion = rawBody && typeof rawBody === "object" && !Array.isArray(rawBody) ? rawBody : null;
     return [200, { ok: true }];
   },
 
@@ -246,16 +263,16 @@ const routes = {
   },
 
   // The game says what's on screen, for the host's phone
-  "POST /api/control": ({ room, body, isHost }) => {
+  "POST /api/control": ({ room, rawBody, isHost }) => {
     if (!isHost) return forbidden();
-    room.controlInfo = body && typeof body === "object" ? body : null;
+    room.controlInfo = rawBody && typeof rawBody === "object" && !Array.isArray(rawBody) ? rawBody : null;
     return [200, { ok: true }];
   },
 
   // --- The host's phone (needs the 4-digit host code) ----------------
   "GET /api/host": ({ room, query }) => {
     if (query.get("code") !== room.hostCode) return [403, { error: "wrong code" }];
-    return [200, { question: room.hostQuestion, locked: room.locked, winner: room.winner, control: room.controlInfo }];
+    return [200, { question: room.hostQuestion, locked: room.locked, winner: room.winner, control: room.controlInfo, theme: room.theme }];
   },
 
   // { action: "goto", target: "round" | "finalWager", round }
@@ -283,7 +300,7 @@ function forbidden() {
 async function handleApi(request, response, url) {
   // A new game: a new room (or the same one again, if the host's game still has its key)
   if (url.pathname === "/api/rooms" && request.method === "POST") {
-    const body = await readJsonBody(request);
+    const body = (await readJsonBody(request)) || {};
     let room = getRoom(body.room);
     if (!room || room.hostKey !== body.hostKey) {
       if (rooms.size >= MAX_ROOMS) return sendJson(response, 503, { error: "Too many games right now. Try again later." });
@@ -302,9 +319,10 @@ async function handleApi(request, response, url) {
   const playerId = url.searchParams.get("player");
   if (playerId) room.players.set(playerId.slice(0, 40), Date.now());
 
-  const body = request.method === "POST" ? await readJsonBody(request) : {};
+  const rawBody = request.method === "POST" ? await readJsonBody(request) : null;
+  const body = rawBody && typeof rawBody === "object" ? rawBody : {};
   const isHost = request.headers["x-host-key"] === room.hostKey;
-  const [status, data] = route({ room, body: body || {}, query: url.searchParams, isHost });
+  const [status, data] = route({ room, body, rawBody, query: url.searchParams, isHost });
   return sendJson(response, status, data);
 }
 
@@ -424,5 +442,5 @@ const server = http.createServer(async (request, response) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`PANALO! is running at http://localhost:${PORT}`);
+  console.log(`Trivia Night is running at http://localhost:${PORT}`);
 });

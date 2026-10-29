@@ -61,6 +61,7 @@ async function checkIn() {
     if (!response.ok) throw new Error(response.status);
 
     const state = await response.json();
+    applyTheme(cleanTheme(state.theme)); // theme.js — the game's theme color
     connectionBanner.hidden = true;
     codeScreen.hidden = true;
     hostScreen.hidden = false;

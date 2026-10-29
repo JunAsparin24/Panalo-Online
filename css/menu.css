@@ -4,12 +4,12 @@
    with other screens, so they live in style.css.)
    ========================================================= */
 
-/* ---------- Title: PANALO! (lettering style in style.css) ---------- */
+/* ---------- Title: Trivia Night (lettering style in style.css) ---------- */
 .game-title {
   margin-top: 0.2em;
   font-family: var(--font-title);
   font-weight: 400;
-  font-size: clamp(3.4rem, min(13vw, 16vh), 8.5rem); /* shrinks on short laptop screens too */
+  font-size: clamp(2.6rem, min(8.5vw, 13vh), 6.2rem); /* shrinks on short laptop screens too */
   line-height: 1;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -28,11 +28,11 @@
   font-size: clamp(1.05rem, 2.4vw, 1.5rem);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #420b13;
+  color: var(--t-420b13);
   background: linear-gradient(180deg, #fff6e6 0%, #f6d595 100%);
   border-radius: 4px;
   box-shadow:
-    0 6px 16px rgba(46, 7, 12, 0.35),
+    0 6px 16px color-mix(in srgb, var(--t-2e070c) 35%, transparent),
     inset 0 0 0 1px rgba(244, 199, 106, 0.9),
     inset 0 0 0 3px rgba(255, 255, 255, 0.5);
 }

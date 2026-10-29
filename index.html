@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PANALO!</title>
+  <title>Trivia Night</title>
   <!-- Browser tab icon: a gold star on red (drawn inline, no image file needed) -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23711a26'/%3E%3Cpath d='M32 11l6.2 12.6 13.8 2-10 9.8 2.4 13.8L32 42.7l-12.4 6.5 2.4-13.8-10-9.8 13.8-2z' fill='%23f4c76a'/%3E%3C/svg%3E">
 
@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@500;600;700&family=Noto+Color+Emoji&family=Sancreek&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/menu.css">
   <link rel="stylesheet" href="css/game.css">
@@ -25,7 +26,7 @@
   <link rel="stylesheet" href="css/first-pick.css">
   <link rel="stylesheet" href="css/team-maker.css">
   <link rel="stylesheet" href="css/game-setup.css">
-  <link rel="stylesheet" href="css/background-color.css">
+  <link rel="stylesheet" href="css/theme-picker.css">
 </head>
 <body data-screen="home">
 
@@ -61,7 +62,7 @@
 
         <p class="eyebrow reveal" style="--reveal-delay: 100ms">Welcome to</p>
 
-        <h1 id="home-title" class="game-title title-lettering reveal reveal--title" style="--reveal-delay: 200ms">PANALO!</h1>
+        <h1 id="home-title" class="game-title title-lettering reveal reveal--title" style="--reveal-delay: 200ms">Trivia Night</h1>
 
         <!-- Friendsgiving Edition ribbon (menu.css) -->
         <p class="edition-ribbon reveal" style="--reveal-delay: 380ms">
@@ -116,7 +117,7 @@
       <header class="game-header">
         <div class="game-header__left">
           <button id="menu-button" class="btn btn--ghost" type="button">&larr; Menu</button>
-          <span class="game-header__title title-lettering">PANALO!</span>
+          <span class="game-header__title title-lettering">Trivia Night</span>
           <!-- Only appears when the buzzer server is running — see buzzer-host.js -->
           <button id="buzzer-button" class="btn btn--ghost buzzer-button" type="button" hidden>
             <span class="buzzer-button__dot" aria-hidden="true"></span>
@@ -440,6 +441,7 @@
           <button class="game-setup__tab" type="button" role="tab" data-tab="round1">Round 1 <span class="game-setup__tab-count"></span></button>
           <button class="game-setup__tab" type="button" role="tab" data-tab="round2">Round 2 <span class="game-setup__tab-count"></span></button>
           <button class="game-setup__tab" type="button" role="tab" data-tab="finalWager">Final Wager <span class="game-setup__tab-count"></span></button>
+          <button class="game-setup__tab" type="button" role="tab" data-tab="theme">Theme <span class="game-setup__tab-count"></span></button>
         </div>
       </header>
 
@@ -448,6 +450,19 @@
 
       <!-- The boxes for the chosen tab — built by game-setup.js -->
       <div id="game-setup-body" class="game-setup__body"></div>
+
+      <!-- THEME tab: the color of everything (theme-picker.js) -->
+      <div id="game-setup-theme" class="setup-theme" hidden>
+        <div id="color-wheel" class="color-wheel" role="slider" tabindex="0" aria-label="Theme color wheel (arrow keys change it)">
+          <span id="color-wheel-marker" class="color-wheel__marker"></span>
+        </div>
+        <div class="setup-theme__side">
+          <label class="setup-theme__label" for="color-brightness">Darker &harr; brighter</label>
+          <input id="color-brightness" type="range" step="1">
+          <p class="setup-theme__note">Changes the color of the whole game: the board, the question cards, every screen, and the players' and host's phones.</p>
+          <button id="color-reset" class="btn btn--ghost" type="button">Reset to red</button>
+        </div>
+      </div>
 
       <footer class="game-setup__footer">
         <div class="game-setup__file">
@@ -516,21 +531,6 @@
     </svg>
   </button>
 
-  <!-- Background color: the rainbow button and its color wheel — see background-color.js -->
-  <button id="color-button" class="color-toggle" type="button" aria-label="Change the background color" aria-expanded="false" aria-controls="color-panel" title="Background color"></button>
-  <div id="color-panel" class="color-panel" hidden role="dialog" aria-label="Background color">
-    <p class="color-panel__title">Background color</p>
-    <div id="color-wheel" class="color-wheel" role="slider" tabindex="0" aria-label="Color wheel (arrow keys change it)">
-      <span id="color-wheel-marker" class="color-wheel__marker"></span>
-    </div>
-    <label class="color-panel__label" for="color-brightness">Darker &harr; brighter</label>
-    <input id="color-brightness" type="range" min="12" max="65" step="1">
-    <div class="color-panel__actions">
-      <button id="color-reset" class="btn btn--ghost" type="button">Reset to red</button>
-      <button id="color-done" class="btn btn--primary" type="button">Done</button>
-    </div>
-  </div>
-
   <!-- Full-screen panel that sweeps across between screens -->
   <div id="transition-wipe" class="wipe" hidden aria-hidden="true">
     <div class="wipe__content">
@@ -543,11 +543,11 @@
   <!-- QR code maker for the buzzer join panel (optional — the link still shows without it) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
+  <script src="js/theme.js"></script>
   <script src="js/questions.js"></script>
   <script src="js/game.js"></script>
   <script src="js/teams.js"></script>
   <script src="js/music.js"></script>
-  <script src="js/background-color.js"></script>
   <script src="js/sound-effects.js"></script>
   <script src="js/board.js"></script>
   <script src="js/scoreboard.js"></script>
@@ -557,6 +557,7 @@
   <script src="js/first-pick.js"></script>
   <script src="js/team-maker.js"></script>
   <script src="js/game-setup.js"></script>
+  <script src="js/theme-picker.js"></script>
   <script src="js/rules.js"></script>
   <script src="js/final-wager.js"></script>
   <script src="js/buzzer-host.js"></script>

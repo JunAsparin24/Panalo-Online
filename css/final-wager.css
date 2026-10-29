@@ -57,11 +57,11 @@
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--color-gold);
-  text-shadow: 3px 3px 0 #420b13, 5px 5px 0 #2a060b;
+  text-shadow: 3px 3px 0 var(--t-420b13), 5px 5px 0 var(--t-2a060b);
   cursor: default;
   border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, #932634 0%, #7e1926 45%, #620e19 100%);
-  border: 1px solid rgba(46, 7, 12, 0.6);
+  background: linear-gradient(160deg, var(--t-932634) 0%, var(--t-7e1926) 45%, var(--t-620e19) 100%);
+  border: 1px solid color-mix(in srgb, var(--t-2e070c) 60%, transparent);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease;
   animation: rise-in 0.6s var(--ease-out) var(--card-delay, 0ms) backwards;
@@ -87,7 +87,7 @@
 .fw-category-card.is-highlighted {
   transform: scale(1.04);
   background: linear-gradient(160deg, #f6d27e 0%, #e7b64f 55%, #c8932f 100%);
-  color: #420b13;
+  color: var(--t-420b13);
   text-shadow: none;
   box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5), 0 0 48px rgba(244, 199, 106, 0.7);
   transition: none;
@@ -97,7 +97,7 @@
 .fw-category-card.is-picked {
   transform: scale(1.08);
   background: linear-gradient(160deg, #f6d27e 0%, #e7b64f 55%, #c8932f 100%);
-  color: #420b13;
+  color: var(--t-420b13);
   text-shadow: none;
   box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55), 0 0 70px rgba(244, 199, 106, 0.9);
   animation: fw-picked-pulse 0.5s ease-in-out 2;
@@ -144,7 +144,7 @@
   line-height: 1;
   font-variant-numeric: tabular-nums;
   color: var(--color-cream);
-  text-shadow: 0 6px 0 rgba(28, 3, 7, 0.6);
+  text-shadow: 0 6px 0 color-mix(in srgb, var(--t-1c0307) 60%, transparent);
 }
 
 .fw-timer.is-running {
@@ -181,7 +181,7 @@
   gap: 10px;
   padding: 6px 8px 6px 16px;
   border-radius: 999px;
-  background: rgba(28, 3, 7, 0.55);
+  background: color-mix(in srgb, var(--t-1c0307) 55%, transparent);
   border: 1px solid var(--color-border-sage);
   box-shadow: inset 5px 0 0 var(--team-color);
 }
@@ -210,7 +210,7 @@
   text-transform: uppercase;
   color: var(--color-sage);
   border-radius: 999px;
-  background: rgba(220, 181, 186, 0.1);
+  background: color-mix(in srgb, var(--t-dcb5ba) 10%, transparent);
 }
 
 .fw-team.is-locked {
