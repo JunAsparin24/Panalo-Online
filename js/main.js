@@ -111,8 +111,10 @@ async function handleStartGame(skipSetupCheck = false) {
   const emptyBoxes = countEmptyBoardBoxes(); // questions.js
   if (skipSetupCheck !== true && emptyBoxes > 0) {
     openGameSetup( // game-setup.js
-      `${emptyBoxes} box${emptyBoxes === 1 ? " is" : "es are"} still empty on the board. ` +
-      "Fill them in, or press Start Game to play anyway."
+      hasAnyText(gameSetup)
+        ? `${emptyBoxes} box${emptyBoxes === 1 ? " is" : "es are"} still empty on the board. ` +
+          "Fill them in, or press Start Game to play anyway."
+        : "No questions yet. Type in your own, or press Example game at the bottom to try one out."
     );
     return;
   }

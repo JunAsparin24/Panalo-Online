@@ -329,6 +329,54 @@ h1 {
   color: var(--color-gold);
 }
 
+/* Scores: name, −, score, + */
+.controls__scores {
+  display: grid;
+  gap: 6px;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 1fr auto 5.5em auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 12px;
+  border-radius: 12px;
+  border-left: 4px solid var(--team-color);
+  background: color-mix(in srgb, var(--t-1c0307) 40%, transparent);
+}
+
+.score-row__name {
+  overflow: hidden;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.score-row__score {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  text-align: center;
+  color: var(--team-color);
+}
+
+.score-row__button {
+  width: 44px;
+  height: 44px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-cream);
+  cursor: pointer;
+  background: linear-gradient(180deg, var(--t-a53342), var(--t-7e1926) 55%, var(--t-620e19));
+  border: 1px solid rgba(244, 199, 106, 0.6);
+  border-radius: 10px;
+}
+
+.score-row__button:active {
+  transform: scale(0.94);
+}
+
 .controls__jump {
   display: grid;
   grid-template-columns: 1fr 1fr;

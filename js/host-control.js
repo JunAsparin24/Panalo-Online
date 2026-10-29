@@ -2,6 +2,7 @@
    host-control.js — Lets the host's phone (/host) steer the game.
 
    From the "Game controls" section on the host screen, the host can:
+     - fix a team's score (− / + 100)
      - jump to any round or Final Wager
      - choose the Final Wager category, and even the exact question
        (or go back to a random pick)
@@ -58,6 +59,8 @@ async function runHostCommand(command) {
     setHostFinalWagerPick(command.categoryIndex, command.questionIndex);
   } else if (command.action === "fwRandom") {
     hostFinalWagerPick = null;
+  } else if (command.action === "score") {
+    changeScore(command.teamId, command.amount); // teams.js — the host fixing a score
   }
   publishControlInfo();
 }
@@ -129,6 +132,7 @@ function publishControlInfo() {
     round: gameState.currentRound,
     totalRounds: getTotalRounds(),
     busy: isTransitioning,
+    teams: getTeams().map(({ id, name, score, color }) => ({ id, name, score, color })), // teams.js
     finalWager: {
       step: finalWager ? finalWager.step : null,
       picking: Boolean(finalWager && finalWager.isPicking),

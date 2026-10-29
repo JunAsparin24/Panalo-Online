@@ -277,6 +277,7 @@ const routes = {
 
   // { action: "goto", target: "round" | "finalWager", round }
   // or { action: "fwPick", categoryIndex, questionIndex } or { action: "fwRandom" }
+  // or { action: "score", teamId, amount }
   "POST /api/host/command": ({ room, body, query }) => {
     if (query.get("code") !== room.hostCode) return [403, { error: "wrong code" }];
     const optionalNumber = (value) => (value === null || value === undefined ? null : wholeNumber(value));
@@ -288,6 +289,8 @@ const routes = {
       round: optionalNumber(body.round),
       categoryIndex: optionalNumber(body.categoryIndex),
       questionIndex: optionalNumber(body.questionIndex),
+      teamId: text(body.teamId, 40),
+      amount: Math.max(-100000, Math.min(100000, wholeNumber(body.amount))),
     }].slice(-20);
     return [200, { ok: true, id: room.commandSeq }];
   },

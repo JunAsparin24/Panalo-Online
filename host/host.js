@@ -121,7 +121,7 @@ function render(state) {
 }
 
 /* ---------- Game controls ----------
-   Jump to a round or Final Wager, and choose the Final
+   Fix scores, jump to a round or Final Wager, and choose the Final
    Wager question. The game runs the command (js/host-control.js). */
 
 const controlsSection = document.getElementById("controls");
@@ -131,6 +131,8 @@ const fwChoice = document.getElementById("fw-choice");
 const fwRandomButton = document.getElementById("fw-random");
 const fwPicker = document.getElementById("fw-picker");
 const controlsToast = document.getElementById("controls-toast");
+const controlsScores = document.getElementById("controls-scores");
+let scoresKey = "";
 let jumpKey = "";
 let pickerKey = "";
 let toastTimer = null;
@@ -153,6 +155,8 @@ function renderControls(control) {
     control.screen === "game" ? `Round ${control.round} board` :
     control.screen === "finalWager" && fw.step ? `Final Wager (${fw.step})` :
     SCREEN_NAMES[control.screen] || control.screen;
+
+  renderScores(control.teams || []);
 
   // Jump buttons (only rebuilt when something changes, so taps aren't lost)
   const currentTarget =
@@ -219,6 +223,58 @@ function renderControls(control) {
     button.classList.toggle("is-active", isActive);
     button.disabled = tooLate;
   });
+}
+
+/* ---------- Scores: − / + 100 for each team ---------- */
+
+const SCORE_STEP = 100;
+
+function renderScores(teams) {
+  // Rebuilt only when the teams change, so taps aren't lost; scores update in place
+  const newKey = JSON.stringify(teams.map(({ id, name, color }) => [id, name, color]));
+  if (newKey !== scoresKey) {
+    scoresKey = newKey;
+    controlsScores.innerHTML = "";
+    teams.forEach((team) => controlsScores.appendChild(createScoreRow(team)));
+  }
+
+  teams.forEach((team) => {
+    const row = controlsScores.querySelector(`[data-team-id="${CSS.escape(team.id)}"]`);
+    if (row) row.querySelector(".score-row__score").textContent = formatPoints(team.score);
+  });
+}
+
+function createScoreRow(team) {
+  const row = document.createElement("div");
+  row.className = "score-row";
+  row.dataset.teamId = team.id;
+  row.style.setProperty("--team-color", team.color);
+
+  const name = document.createElement("span");
+  name.className = "score-row__name";
+  name.textContent = team.name;
+
+  const score = document.createElement("span");
+  score.className = "score-row__score";
+
+  const button = (amount) => {
+    const element = document.createElement("button");
+    element.type = "button";
+    element.className = "score-row__button";
+    element.textContent = amount > 0 ? "+" : "−";
+    element.setAttribute("aria-label", `${amount > 0 ? "Add" : "Take away"} ${SCORE_STEP} ${amount > 0 ? "to" : "from"} ${team.name}`);
+    element.addEventListener("click", () => {
+      sendCommand({ action: "score", teamId: team.id, amount }, `${team.name} ${amount > 0 ? "+" : "−"}${SCORE_STEP}`);
+    });
+    return element;
+  };
+
+  row.append(name, button(-SCORE_STEP), score, button(SCORE_STEP));
+  return row;
+}
+
+function formatPoints(score) {
+  return `${score < 0 ? "−" : ""}$${Math.abs(score).toLocaleString("en-US")}`;
 }
 
 function buildFinalWagerPicker(categories) {

@@ -5,7 +5,7 @@
         - ♛ shows who "has the board" (picks the next question);
           click a team's ♛ to hand them the board
         - click a team name to rename it
-        - click a score to type in a correction
+        - click a score to fix it (type a number, or − / + 100)
         - × removes a team (asks "Remove?" first), + Team adds one
    2. The ✓ / ✗ buttons on the question card after the answer
       is shown (✓ adds the question's value, ✗ subtracts it —
@@ -26,6 +26,7 @@ let currentAwardTeamIds = null; // null = every team can score
 let boardTeamBeforeQuestion = null; // who had the board when this question opened
 
 const REMOVE_CONFIRM_MS = 3000;
+const SCORE_STEP = 100; // the − / + buttons when fixing a score
 
 /* =========================================================
    1. SCOREBOARD
@@ -92,7 +93,7 @@ function createTeamChip(team) {
   scoreButton.type = "button";
   scoreButton.className = "team-chip__score";
   scoreButton.textContent = formatMoney(team.score);
-  scoreButton.title = "Click to change this score";
+  scoreButton.title = "Click to fix this score";
   scoreButton.addEventListener("click", () => startEditingScore(chip, team));
 
   chip.append(boardButton, nameInput, scoreButton);
@@ -149,7 +150,26 @@ function startEditingScore(chip, team) {
   });
   input.addEventListener("blur", () => finish(true));
 
-  scoreButton.replaceWith(input);
+  // − / + 100 on either side of the box
+  const stepButton = (amount) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "team-chip__step";
+    button.textContent = amount > 0 ? "+" : "−";
+    button.setAttribute("aria-label", `${amount > 0 ? "Add" : "Take away"} ${Math.abs(amount)}`);
+    button.addEventListener("pointerdown", (event) => event.preventDefault()); // keeps the box open
+    button.addEventListener("click", () => {
+      input.value = String((Math.round(Number(input.value)) || 0) + amount);
+      input.focus();
+    });
+    return button;
+  };
+
+  const editor = document.createElement("span");
+  editor.className = "team-chip__score-editor";
+  editor.append(stepButton(-SCORE_STEP), input, stepButton(SCORE_STEP));
+
+  scoreButton.replaceWith(editor);
   input.focus();
   input.select();
 }

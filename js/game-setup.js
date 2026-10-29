@@ -514,6 +514,18 @@ function clearWholeSetup() {
   showSetupStatus("Cleared");
 }
 
+// The ready-made game (example-game.js). Asks first if it would replace questions.
+function loadExampleGame() {
+  const button = document.getElementById("game-setup-example");
+  if (hasAnyText(gameSetup) && !askToConfirm(button, "Replace your questions?")) return;
+  gameSetup = normalizeGameSetup(createExampleSetup()); // questions.js
+  const saved = saveGameSetup();
+  gameSetupTab = "round1";
+  renderGameSetup();
+  if (saved) showSetupStatus("Example game loaded. Press Start Game, or change anything you like");
+  else handleSetupChanged();
+}
+
 /* =========================================================
    BUTTONS & KEYBOARD
    ========================================================= */
@@ -528,6 +540,7 @@ document.getElementById("game-setup-save").addEventListener("click", saveSetupTo
 document.getElementById("game-setup-load").addEventListener("click", () => gameSetupFileInput.click());
 gameSetupFileInput.addEventListener("change", () => loadSetupFromFile(gameSetupFileInput.files[0]));
 gameSetupClearButton.addEventListener("click", clearWholeSetup);
+document.getElementById("game-setup-example").addEventListener("click", loadExampleGame);
 setupPictureInput.addEventListener("change", () => {
   if (setupPictureTarget) addPictureToQuestion(setupPictureTarget, setupPictureInput.files[0]);
   setupPictureTarget = null;
