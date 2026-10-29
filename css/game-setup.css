@@ -7,8 +7,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 14px;
+  margin-top: clamp(18px, 3vh, 26px); /* room for the Start button's glow */
 }
 
 .home-tools .team-maker-open {

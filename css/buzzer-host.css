@@ -49,8 +49,8 @@
 /* ---------- Home screen join line ---------- */
 .home-join {
   display: block;
-  margin: clamp(14px, 2.5vh, 22px) auto 0;
-  padding: 0.5em 1.2em;
+  margin: clamp(20px, 3.5vh, 30px) auto 0;
+  padding: 0.6em 1.4em;
   font: inherit;
   font-size: 0.85rem;
   font-weight: 600;
@@ -79,7 +79,7 @@
 /* "Playing in a friend's game?" link under it */
 .home-player-link {
   display: block;
-  margin: 10px auto 0;
+  margin: 14px auto 0;
   font-size: 0.85rem;
   color: var(--color-sage);
   text-align: center;
