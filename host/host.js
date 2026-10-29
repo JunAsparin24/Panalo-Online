@@ -1,12 +1,13 @@
 /* =========================================================
    host.js — The host's phone screen.
 
-   1. Enter the host code once (remembered on this phone)
+   1. Open the link from the game's Buzzers panel (/host?room=CODE)
+      and enter the 4-digit host code once (remembered on this phone)
    2. Whenever a tile is picked in the game, the full question
       and its answer show up here straight away — no animation
    3. Shows which team buzzed in
 
-   The phone checks in with the laptop a couple of times a second.
+   The phone checks in with the server a couple of times a second.
    ========================================================= */
 
 const POLL_MS = 500;
@@ -15,6 +16,7 @@ const CODE_KEY = "panalo-host-code";
 const codeScreen = document.getElementById("code-screen");
 const codeInput = document.getElementById("code-input");
 const codeError = document.getElementById("code-error");
+const roomInput = document.getElementById("room-input");
 const hostScreen = document.getElementById("host-screen");
 const connectionBanner = document.getElementById("connection-banner");
 const waitingElement = document.getElementById("waiting");
@@ -31,15 +33,16 @@ const wordDefinitionElement = document.getElementById("word-definition");
 const wordOriginElement = document.getElementById("word-origin");
 const wordSentenceElement = document.getElementById("word-sentence");
 const buzzElement = document.getElementById("buzz");
-const fastMoneyCard = document.getElementById("fast-money-card");
-const fastMoneyList = document.getElementById("fast-money-list");
 
-// The code can also come in the link (…/host?code=1234), handy for a bookmark
-let hostCode = new URLSearchParams(location.search).get("code") || readStorage(CODE_KEY);
+// The game code comes in the link (…/host?room=ABCD); it can also be typed in.
+// The host code can come in the link too (…&code=1234), handy for a bookmark.
+const linkParams = new URLSearchParams(location.search);
+let roomCode = (linkParams.get("room") || "").trim().toUpperCase();
+let hostCode = linkParams.get("code") || readStorage(CODE_KEY);
 if (hostCode) writeStorage(CODE_KEY, hostCode);
 let shownQuestionKey = null; // so the page only redraws when the question changes
 
-/* ---------- Talking to the laptop ---------- */
+/* ---------- Talking to the server ---------- */
 
 // Gives up on a request after 5 seconds, so one stuck request can't stall the phone
 function requestTimeout() {
@@ -47,11 +50,11 @@ function requestTimeout() {
 }
 
 async function checkIn() {
-  if (!hostCode) return;
+  if (!hostCode || !roomCode) return;
 
   try {
-    const response = await fetch(`/api/host?code=${encodeURIComponent(hostCode)}`, { cache: "no-store", signal: requestTimeout() });
-    if (response.status === 403) {
+    const response = await fetch(hostApiUrl("/api/host"), { cache: "no-store", signal: requestTimeout() });
+    if (response.status === 403 || response.status === 404) {
       showCodeScreen(true);
       return;
     }
@@ -67,24 +70,19 @@ async function checkIn() {
   }
 }
 
+function hostApiUrl(path) {
+  return `${path}?room=${encodeURIComponent(roomCode)}&code=${encodeURIComponent(hostCode)}`;
+}
+
 /* ---------- Drawing the screen ---------- */
 
 function render(state) {
-  const fastMoney = state.question && state.question.fastMoney;
-  const question = fastMoney ? null : state.question;
+  const question = state.question;
 
-  waitingElement.hidden = Boolean(state.question);
+  waitingElement.hidden = Boolean(question);
   questionCard.hidden = !question;
-  fastMoneyCard.hidden = !fastMoney;
 
-  if (fastMoney) {
-    const key = JSON.stringify(fastMoney);
-    if (key !== shownQuestionKey) {
-      shownQuestionKey = key;
-      renderFastMoney(fastMoney);
-      window.scrollTo(0, 0);
-    }
-  } else if (question) {
+  if (question) {
     const key = JSON.stringify(question);
     if (key !== shownQuestionKey) {
       shownQuestionKey = key;
@@ -101,7 +99,8 @@ function render(state) {
       wordOriginElement.textContent = wordInfo ? wordInfo.origin : "";
       wordSentenceElement.textContent = wordInfo ? wordInfo.sentence : "";
       imageElement.hidden = !question.image;
-      if (question.image) imageElement.src = "/" + question.image;
+      // Pictures from the setup screen are "data:" text; older ones are file paths
+      if (question.image) imageElement.src = question.image.startsWith("data:") ? question.image : "/" + question.image;
       questionCard.classList.toggle("is-golden", Boolean(question.golden));
       window.scrollTo(0, 0);
     }
@@ -121,7 +120,7 @@ function render(state) {
 }
 
 /* ---------- Game controls ----------
-   Jump to a round / Final Wager / Fast Money, and choose the Final
+   Jump to a round or Final Wager, and choose the Final
    Wager question. The game runs the command (js/host-control.js). */
 
 const controlsSection = document.getElementById("controls");
@@ -140,7 +139,6 @@ const SCREEN_NAMES = {
   rules: "Rules slide",
   roundComplete: "Round complete",
   finalWager: "Final Wager",
-  fastMoney: "Fast Money",
   gameOver: "Game over",
 };
 
@@ -158,8 +156,7 @@ function renderControls(control) {
   // Jump buttons (only rebuilt when something changes, so taps aren't lost)
   const currentTarget =
     control.screen === "game" || control.screen === "roundComplete" ? `round${control.round}` :
-    control.screen === "finalWager" ? "finalWager" :
-    control.screen === "fastMoney" ? "fastMoney" : "";
+    control.screen === "finalWager" ? "finalWager" : "";
   const newJumpKey = `${control.totalRounds}|${currentTarget}`;
   if (newJumpKey !== jumpKey) {
     jumpKey = newJumpKey;
@@ -169,7 +166,6 @@ function renderControls(control) {
       targets.push({ key: `round${round}`, label: `Round ${round}`, command: { action: "goto", target: "round", round } });
     }
     targets.push({ key: "finalWager", label: "Final Wager", command: { action: "goto", target: "finalWager" } });
-    targets.push({ key: "fastMoney", label: "Fast Money", command: { action: "goto", target: "fastMoney" } });
 
     targets.forEach(({ key, label, command }) => {
       const button = document.createElement("button");
@@ -270,7 +266,7 @@ fwRandomButton.addEventListener("click", () => sendCommand({ action: "fwRandom" 
 
 async function sendCommand(command, message) {
   try {
-    const response = await fetch(`/api/host/command?code=${encodeURIComponent(hostCode)}`, {
+    const response = await fetch(hostApiUrl("/api/host/command"), {
       method: "POST",
       body: JSON.stringify(command),
       cache: "no-store",
@@ -290,34 +286,6 @@ function showToast(text) {
   toastTimer = setTimeout(() => { controlsToast.hidden = true; }, 2500);
 }
 
-// Fast Money: each question with its survey answers and points
-function renderFastMoney(questions) {
-  fastMoneyList.innerHTML = "";
-  questions.forEach(({ question, answers }) => {
-    const item = document.createElement("li");
-    item.className = "fm-list__item";
-
-    const text = document.createElement("p");
-    text.className = "fm-list__question";
-    text.textContent = question;
-
-    const answerList = document.createElement("ul");
-    answerList.className = "fm-list__answers";
-    answers.forEach(({ answer, points }) => {
-      const row = document.createElement("li");
-      const name = document.createElement("span");
-      name.textContent = answer;
-      const value = document.createElement("strong");
-      value.textContent = points;
-      row.append(name, value);
-      answerList.appendChild(row);
-    });
-
-    item.append(text, answerList);
-    fastMoneyList.appendChild(item);
-  });
-}
-
 /* ---------- Host code ---------- */
 
 function showCodeScreen(wasWrong) {
@@ -327,13 +295,18 @@ function showCodeScreen(wasWrong) {
   codeScreen.hidden = false;
   codeError.hidden = !wasWrong;
   codeInput.value = "";
-  codeInput.focus();
+  // Without a game code in the link, it's typed in here too
+  roomInput.hidden = Boolean(roomCode) && !wasWrong;
+  roomInput.value = roomCode;
+  (roomInput.hidden ? codeInput : roomInput).focus();
 }
 
 codeScreen.addEventListener("submit", (event) => {
   event.preventDefault();
   const code = codeInput.value.trim();
-  if (!code) return;
+  const room = roomInput.value.trim().toUpperCase();
+  if (!code || !room) return;
+  roomCode = room;
   hostCode = code;
   writeStorage(CODE_KEY, code);
   codeError.hidden = true;
@@ -352,12 +325,12 @@ function writeStorage(key, value) {
 
 /* ---------- Start ---------- */
 
-if (hostCode) {
+if (hostCode && roomCode) {
   checkIn();
 } else {
   showCodeScreen(false);
 }
-// Asks again only after the last answer arrives (no pile-up on a busy laptop)
+// Asks again only after the last answer arrives (no pile-up of requests)
 async function pollLoop() {
   await checkIn();
   setTimeout(pollLoop, POLL_MS);

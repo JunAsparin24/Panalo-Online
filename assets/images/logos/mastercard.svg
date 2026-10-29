@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 300 200">
-  <defs><clipPath id="right-circle"><circle cx="184" cy="100" r="64"/></clipPath></defs>
-  <rect width="300" height="200" fill="#ffffff"/>
-  <!-- red circle, yellow-orange circle, and the orange where they overlap -->
-  <circle cx="116" cy="100" r="64" fill="#eb001b"/>
-  <circle cx="184" cy="100" r="64" fill="#f79e1b"/>
-  <circle cx="116" cy="100" r="64" fill="#ff5f00" clip-path="url(#right-circle)"/>
-</svg>

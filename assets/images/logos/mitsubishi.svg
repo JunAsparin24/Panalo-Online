@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 300 200">
-  <rect width="300" height="200" fill="#ffffff"/>
-  <!-- three red diamonds meeting in the middle -->
-  <g fill="#e60012">
-    <polygon points="150,118 120,66 150,14 180,66"/>
-    <polygon points="150,118 210,118 240,170 180,170"/>
-    <polygon points="150,118 90,118 60,170 120,170"/>
-  </g>
-</svg>

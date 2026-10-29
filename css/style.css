@@ -38,6 +38,16 @@
   --font-display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
   --font-body: "Montserrat", "Segoe UI", system-ui, sans-serif;
 
+  /* The animated background (.stage). background-color.js changes
+     these when a color is picked on the color wheel */
+  --stage-top: #e46fa5;    /* the glow at the top left */
+  --stage-main: var(--color-bg);
+  --stage-mid: #9c2c62;
+  --stage-bottom: var(--color-bg-dark);
+  --stage-deep: #6b1640;   /* the dark glow at the bottom */
+  --stage-glow: var(--color-green-mid);
+  --stage-glow-light: #ff8fc0;
+
   /* Shape & motion */
   --radius-sm: 10px;
   --radius-md: 16px;
@@ -353,9 +363,9 @@ input[type="number"]::-webkit-outer-spin-button {
   overflow: hidden;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 20% 0%, #e46fa5 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 120%, #6b1640 0%, transparent 55%),
-    linear-gradient(180deg, var(--color-bg) 0%, #9c2c62 60%, var(--color-bg-dark) 100%);
+    radial-gradient(ellipse at 20% 0%, var(--stage-top) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 120%, var(--stage-deep) 0%, transparent 55%),
+    linear-gradient(180deg, var(--stage-main) 0%, var(--stage-mid) 60%, var(--stage-bottom) 100%);
   transition: opacity 0.8s ease;
 }
 
@@ -383,7 +393,7 @@ body[data-screen="game"] .stage {
   left: -18vmax;
   width: 60vmax;
   height: 60vmax;
-  background: radial-gradient(circle, var(--color-green-mid) 0%, transparent 65%);
+  background: radial-gradient(circle, var(--stage-glow) 0%, transparent 65%);
   opacity: 0.4;
   animation: drift-one 28s ease-in-out infinite alternate;
 }
@@ -393,7 +403,7 @@ body[data-screen="game"] .stage {
   bottom: -25vmax;
   width: 65vmax;
   height: 65vmax;
-  background: radial-gradient(circle, #ff8fc0 0%, transparent 65%);
+  background: radial-gradient(circle, var(--stage-glow-light) 0%, transparent 65%);
   opacity: 0.4;
   animation: drift-two 34s ease-in-out infinite alternate;
 }

@@ -10,7 +10,6 @@ const screens = {
   roundComplete: document.getElementById("round-complete-screen"),
   rules: document.getElementById("rules-screen"),
   finalWager: document.getElementById("final-wager-screen"),
-  fastMoney: document.getElementById("fast-money-screen"),
   gameOver: document.getElementById("game-over-screen"),
 };
 
@@ -104,8 +103,20 @@ async function playTransition({ title = "", subtitle = "", onCovered, onReveal }
 
 /* ---------- Navigation ---------- */
 
-async function handleStartGame() {
+// skipSetupCheck: true = start even if the board still has empty boxes
+// (the setup screen's own Start Game button, and Play Again)
+async function handleStartGame(skipSetupCheck = false) {
   if (isTransitioning) return;
+
+  const emptyBoxes = countEmptyBoardBoxes(); // questions.js
+  if (skipSetupCheck !== true && emptyBoxes > 0) {
+    openGameSetup( // game-setup.js
+      `${emptyBoxes} box${emptyBoxes === 1 ? " is" : "es are"} still empty on the board. ` +
+      "Fill them in, or press Start Game to play anyway."
+    );
+    return;
+  }
+
   isTransitioning = true;
   clearTimeout(roundEndTimer);
   resetMenuButton();
@@ -114,7 +125,6 @@ async function handleStartGame() {
   startNewGame(); // game.js — round 1, all questions unused
   resetScores();  // teams.js — every team back to $0 (names are kept)
   resetFinalWager(); // final-wager.js
-  resetFastMoney(); // fast-money.js
   await playRoundIntro();
 
   isTransitioning = false;
@@ -127,7 +137,6 @@ async function handleReturnToMenu() {
   closeFirstPicker(); // first-pick.js
   playSong("menu"); // music.js — back to the horn theme
   resetFinalWager(); // final-wager.js — stops its timer if one was running
-  resetFastMoney(); // fast-money.js
 
   await playTransition({
     onCovered: () => showScreen("home"),
@@ -195,9 +204,13 @@ async function enterSegmentAfterRules(onCovered, onReveal) {
 /* ---------- Between rounds ---------- */
 
 // Called by board.js when the last question on the board is closed.
-// Goes to "Round Complete", or after the final round to Final Wager.
+// Goes to "Round Complete", or after the final round to Final Wager
+// (or straight to "Game Over", if no Final Wager questions were set up).
 function handleRoundComplete() {
-  const nextScreen = hasNextRound() ? showRoundCompleteScreen : showFinalWagerScreen;
+  const nextScreen =
+    hasNextRound() ? showRoundCompleteScreen :
+    hasFinalWager() ? showFinalWagerScreen : // final-wager.js
+    showGameOverScreen;
   roundEndTimer = setTimeout(nextScreen, ROUND_END_PAUSE_MS);
 }
 
@@ -214,33 +227,6 @@ async function showFinalWagerScreen() {
       onCovered: () => {
         prepareFinalWager();
         showScreen("finalWager");
-      },
-    }),
-  });
-
-  isTransitioning = false;
-}
-
-// After Final Wager: the top two teams play Fast Money
-// (or straight to "Game Over" if there's only one team)
-function continueAfterFinalWager() {
-  if (canPlayFastMoney()) showFastMoneyScreen(); // fast-money.js
-  else showGameOverScreen();
-}
-
-// The "FAST MONEY" wipe, its rules, then the Fast Money screen (fast-money.js)
-async function showFastMoneyScreen() {
-  if (isTransitioning) return;
-  isTransitioning = true;
-
-  playFastMoneySting(); // sound-effects.js — ticking clock + "ka-ching!"
-  await playTransition({
-    title: "Fast Money",
-    subtitle: `Top two teams · ${FAST_MONEY_SECONDS} seconds each`,
-    onCovered: () => showRulesScreen("fastMoney", {
-      onCovered: () => {
-        prepareFastMoney();
-        showScreen("fastMoney");
       },
     }),
   });
@@ -308,10 +294,9 @@ async function showGameOverScreen() {
   isTransitioning = false;
 }
 
-// "TEAM 1 WINS!" and the final scores, highest first (scoreboard.js).
-// After Fast Money, the Fast Money result decides the winner.
+// "TEAM 1 WINS!" and the final scores, highest first (scoreboard.js)
 function fillGameOverScreen() {
-  document.getElementById("winner-text").textContent = fastMoneyWinnerText || getWinnerText();
+  document.getElementById("winner-text").textContent = getWinnerText();
   renderStandings(document.getElementById("final-standings"));
 }
 
@@ -360,15 +345,12 @@ function devFinalWager() {
   showFinalWagerScreen();
 }
 
-// Type  devFastMoney()  in the console (F12) to jump straight to Fast Money
-function devFastMoney() {
-  showFastMoneyScreen();
-}
 
 /* ---------- Home screen ---------- */
 
 // Fills in "2 ROUNDS / 5 CATEGORIES / 25 QUESTIONS" from questions.js
 // so the home screen stays accurate if the data changes.
+// (game-setup.js calls it again when the setup screen closes.)
 function fillHomeStats() {
   const firstRound = getRoundData(1);
   const questionsPerRound = firstRound.categories.reduce(
@@ -410,10 +392,10 @@ function init() {
   fillHomeStats();
   createBackgroundParticles(28);
 
-  startButton.addEventListener("click", handleStartGame);
+  startButton.addEventListener("click", () => handleStartGame(false)); // opens the setup screen if boxes are empty
   menuButton.addEventListener("click", handleMenuButtonClick);
   continueButton.addEventListener("click", handleContinueToNextRound);
-  playAgainButton.addEventListener("click", handleStartGame); // full reset: round 1, fresh board
+  playAgainButton.addEventListener("click", () => handleStartGame(true)); // full reset: round 1, fresh board
   mainMenuButton.addEventListener("click", handleReturnToMenu);
 }
 

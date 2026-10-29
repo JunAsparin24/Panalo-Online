@@ -1,16 +1,19 @@
 /* =========================================================
    buzzer.js — The phone buzzer.
 
+   0. Players go to the site and type the 4-letter game code shown
+      on the host's screen, like Jackbox (or open a link with the
+      code already in it: /?room=CODE)
    1. The player picks their team (the list comes from the game)
    2. A big button: TAP TO ANSWER
    3. The first team to tap locks everyone else out until the
       host clicks "Unlock buzzers" in the game (or their 15
       seconds run out). A team that already guessed stays locked
       until the next question.
-   4. During Fast Money the phone becomes a questionnaire for the
-      team that's answering (fast-money-phone.js)
+   4. During Final Wager the phone is for the team's secret wager
+      (final-wager-phone.js)
 
-   The phone checks in with the laptop a few times a second.
+   The phone checks in with the server a few times a second.
    ========================================================= */
 
 const POLL_MS = 400;
@@ -27,6 +30,13 @@ const buzzButtonSub = document.getElementById("buzz-button-sub");
 const buzzStatus = document.getElementById("buzz-status");
 const changeTeamButton = document.getElementById("change-team-button");
 const connectionBanner = document.getElementById("connection-banner");
+const joinScreen = document.getElementById("join-screen");
+const joinForm = document.getElementById("join-form");
+const joinCodeInput = document.getElementById("join-code");
+const joinError = document.getElementById("join-error");
+
+// This game's code, from the link (…/?room=ABCD)
+const roomCode = (new URLSearchParams(location.search).get("room") || "").trim().toUpperCase();
 
 const playerId = getOrCreatePlayerId();
 let myTeamId = readStorage(TEAM_KEY);
@@ -35,16 +45,25 @@ let isSendingBuzz = false;
 let lastCelebratedBuzzId = null;
 let isChoosingTeam = false;
 
-/* ---------- Talking to the laptop ---------- */
+/* ---------- Talking to the server ---------- */
 
 // Gives up on a request after 5 seconds, so one stuck request can't stall the phone
 function requestTimeout() {
   return window.AbortSignal && AbortSignal.timeout ? AbortSignal.timeout(5000) : undefined;
 }
 
+// "/api/state" → "/api/state?room=ABCD"
+function apiUrl(path) {
+  return `${path}${path.includes("?") ? "&" : "?"}room=${encodeURIComponent(roomCode)}`;
+}
+
 async function checkIn() {
   try {
-    const response = await fetch(`/api/state?player=${encodeURIComponent(playerId)}`, { cache: "no-store", signal: requestTimeout() });
+    const response = await fetch(apiUrl(`/api/state?player=${encodeURIComponent(playerId)}`), { cache: "no-store", signal: requestTimeout() });
+    if (response.status === 404) {
+      showJoinScreen(true); // no game with this code (or it ended)
+      return;
+    }
     if (!response.ok) throw new Error(response.status);
     latestState = await response.json();
     connectionBanner.hidden = true;
@@ -61,7 +80,7 @@ async function buzz() {
   showButton("sending", "…", "");
 
   try {
-    const response = await fetch("/api/buzz", {
+    const response = await fetch(apiUrl("/api/buzz"), {
       method: "POST",
       body: JSON.stringify({ teamId: myTeamId, playerId }),
     });
@@ -94,14 +113,11 @@ function render() {
   changeTeamButton.textContent = `${myTeam.name} · change`;
   document.documentElement.style.setProperty("--team-color", myTeam.color);
 
-  // Final Wager and Fast Money take over the phone
-  // (final-wager-phone.js, fast-money-phone.js)
+  // Final Wager takes over the phone (final-wager-phone.js)
   const isFinalWager = Boolean(latestState.finalWager && latestState.finalWager.active);
-  const isFastMoney = !isFinalWager && Boolean(latestState.fastMoney && latestState.fastMoney.active);
-  buzzScreen.hidden = isFinalWager || isFastMoney;
+  buzzScreen.hidden = isFinalWager;
   renderFinalWagerPhone(isFinalWager ? latestState.finalWager : null);
-  renderFastMoneyPhone(isFastMoney ? latestState.fastMoney : null, teams);
-  if (isFinalWager || isFastMoney) return;
+  if (isFinalWager) return;
 
   const winner = latestState.locked ? latestState.winner : null;
   const alreadyGuessed = (latestState.blocked || []).includes(myTeamId);
@@ -139,7 +155,6 @@ function render() {
 function renderTeamPicker(teams) {
   buzzScreen.hidden = true;
   renderFinalWagerPhone(null);
-  renderFastMoneyPhone(null, teams);
   teamScreen.hidden = false;
   changeTeamButton.hidden = true;
   noTeamsMessage.hidden = teams.length > 0;
@@ -204,6 +219,26 @@ changeTeamButton.addEventListener("click", () => {
   render();
 });
 
+/* ---------- Joining with a game code ---------- */
+
+function showJoinScreen(wasWrong) {
+  joinScreen.hidden = false;
+  teamScreen.hidden = true;
+  buzzScreen.hidden = true;
+  renderFinalWagerPhone(null);
+  changeTeamButton.hidden = true;
+  connectionBanner.hidden = true;
+  joinError.hidden = !wasWrong;
+  if (wasWrong) joinCodeInput.value = roomCode;
+}
+
+// Opens this page again with the code in the link, so it can be bookmarked or shared
+joinForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const code = joinCodeInput.value.trim().toUpperCase();
+  if (code) location.href = `${location.pathname}?room=${encodeURIComponent(code)}`;
+});
+
 /* ---------- Remembering this phone ---------- */
 
 function getOrCreatePlayerId() {
@@ -225,10 +260,15 @@ function writeStorage(key, value) {
 
 /* ---------- Start ---------- */
 
-// Asks again only after the last answer arrives, so a busy laptop never
-// gets a pile-up of requests from every phone
+// Asks again only after the last answer arrives, so the server never
+// gets a pile-up of requests from every phone. Stops if the code is wrong.
 async function pollLoop() {
   await checkIn();
-  setTimeout(pollLoop, POLL_MS);
+  if (joinScreen.hidden) setTimeout(pollLoop, POLL_MS);
 }
-pollLoop();
+
+if (roomCode) {
+  pollLoop();
+} else {
+  showJoinScreen(false);
+}

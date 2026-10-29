@@ -16,16 +16,29 @@
 </head>
 <body>
   <!-- =========================================================
-       PHONE BUZZER — opened by players at http://<laptop>:8080/buzz
-       Talks to server/buzzer-server.ps1 on the host's laptop.
+       PHONE BUZZER — the site's main page. Players type the
+       4-letter game code (or open /?room=CODE).
+       Talks to server/server.js.
        ========================================================= -->
   <header class="top-bar">
     <span class="top-bar__title">PANALO!</span>
     <button id="change-team-button" class="top-bar__team" type="button" hidden></button>
   </header>
 
-  <!-- Shown when the connection to the laptop drops -->
+  <!-- Shown when the connection to the game drops -->
   <p id="connection-banner" class="connection-banner" hidden>Reconnecting to the game&hellip;</p>
+
+  <!-- Opened without a game code: type the code the host gives you -->
+  <main id="join-screen" class="screen join-screen" hidden>
+    <p class="phone-title">Join a game</p>
+    <form id="join-form" class="phone-form">
+      <label class="phone-form__label" for="join-code">Game code</label>
+      <input id="join-code" class="phone-form__input" type="text" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD">
+      <p id="join-error" class="join-screen__error" hidden>There's no game with that code. Check it with your host.</p>
+      <button class="phone-button" type="submit">Join</button>
+    </form>
+    <a class="join-screen__host-link" href="/play">Want to host your own game? &rarr;</a>
+  </main>
 
   <!-- Step 1: pick your team -->
   <main id="team-screen" class="screen" hidden>
@@ -45,45 +58,21 @@
 
   <!-- Final Wager: each team types its secret wager (final-wager-phone.js) -->
   <main id="fw-screen" class="screen fw-phone" hidden>
-    <p class="fm-wait__title">Final Wager</p>
+    <p class="phone-title">Final Wager</p>
     <p id="fw-phone-category" class="fw-phone__category"></p>
 
-    <form id="fw-form" class="fw-form">
-      <label class="fw-form__label" for="fw-amount">Your wager</label>
-      <p id="fw-limit" class="fw-form__limit"></p>
-      <input id="fw-amount" class="fw-form__input" type="number" inputmode="numeric" min="0" step="100" placeholder="0">
-      <button id="fw-submit" class="fm-quiz__next" type="submit">Lock in wager</button>
+    <form id="fw-form" class="phone-form">
+      <label class="phone-form__label" for="fw-amount">Your wager</label>
+      <p id="fw-limit" class="phone-form__limit"></p>
+      <input id="fw-amount" class="phone-form__input" type="number" inputmode="numeric" min="0" step="100" placeholder="0">
+      <button id="fw-submit" class="phone-button" type="submit">Lock in wager</button>
     </form>
 
     <p id="fw-phone-status" class="fw-phone__status"></p>
   </main>
 
-  <!-- Fast Money: the answering team's questionnaire (fast-money-phone.js) -->
-  <main id="fm-screen" class="screen fm-phone" hidden>
-    <div id="fm-wait" class="fm-wait">
-      <p class="fm-wait__title">Fast Money</p>
-      <p id="fm-wait-text" class="fm-wait__text"></p>
-    </div>
-
-    <form id="fm-quiz" class="fm-quiz" hidden>
-      <div class="fm-quiz__top">
-        <span id="fm-clock" class="fm-quiz__clock">00:45</span>
-        <span id="fm-progress" class="fm-quiz__progress"></span>
-      </div>
-      <p id="fm-question" class="fm-quiz__question"></p>
-      <input id="fm-answer" class="fm-quiz__input" type="text" maxlength="60" autocomplete="off" autocapitalize="sentences" enterkeyhint="next" placeholder="Type your answer" aria-label="Your answer">
-      <div class="fm-quiz__buttons">
-        <button id="fm-skip" class="fm-quiz__skip" type="button">Skip</button>
-        <button class="fm-quiz__next" type="submit">Next &rarr;</button>
-      </div>
-      <p id="fm-note" class="fm-quiz__note"></p>
-    </form>
-  </main>
-
   <script src="/buzzer/buzzer.js"></script>
   <script src="/buzzer/final-wager-phone.js"></script>
-  <script src="/js/answer-match.js"></script>
-  <script src="/buzzer/fast-money-phone.js"></script>
   <script src="/js/phone-fit.js"></script>
 </body>
 </html>

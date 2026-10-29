@@ -4,8 +4,8 @@
    everything shrinks just enough to fit.
 
    It never shrinks below PHONE_FIT_MIN_ZOOM, so text stays easy to
-   read. Something far too long for that (like the host's list of
-   every Fast Money answer) stays full size and scrolls instead.
+   read. Something far too long for that stays full size and
+   scrolls instead.
    ========================================================= */
 
 const PHONE_FIT_MIN_ZOOM = 0.7;

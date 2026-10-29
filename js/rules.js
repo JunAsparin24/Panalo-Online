@@ -1,6 +1,6 @@
 /* =========================================================
    rules.js — The rules slide shown at the start of each segment
-   (Round 1, Round 2, Final Wager, Fast Money).
+   (Round 1, Round 2, Final Wager).
 
    main.js shows it after the segment's title wipe; the host
    explains the rules, then clicks the button to begin.
@@ -16,7 +16,7 @@ const rulesButton = document.getElementById("rules-button");
 
 let rulesContinue = null; // what the button does (set by showRules)
 
-// segment: "round1", "round2", "finalWager" or "fastMoney"
+// segment: "round1", "round2" or "finalWager"
 function getRules(segment) {
   const valueRange = (round) => {
     const values = getRoundValues(round); // game.js
@@ -66,24 +66,9 @@ function getRules(segment) {
           "**Secretly wager on your phone.** Anything from 0 up to the points you have, once you know the category.",
           `Then the question appears. You have **${finalWagerTime}** to write your answer on your **whiteboard**.`,
           "**Right:** add your wager. **Wrong:** lose it.",
-          "The **top two teams** after Final Wager go to Fast Money!",
+          "The team with the **most points** after Final Wager **wins the game!**",
         ],
         button: "Pick the category",
-      };
-
-    case "fastMoney":
-      return {
-        eyebrow: "The final showdown",
-        title: "Fast Money",
-        rules: [
-          "Only the **top two teams** play. **First place goes first**, and the other team waits somewhere they can't hear.",
-          `**Five survey questions** appear on your phone. You have **${FAST_MONEY_SECONDS} seconds** for all five.`,
-          "Stuck? Tap **Skip** and the question comes back at the end.",
-          "The second team **can't repeat** an answer the first team gave.",
-          "Each answer scores **how many people in the survey said it**.",
-          "The **highest Fast Money total wins the game!**",
-        ],
-        button: "Let's play Fast Money",
       };
 
     default:

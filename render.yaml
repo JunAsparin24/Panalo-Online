@@ -1,0 +1,10 @@
+# Render setup (https://render.com): New + > Blueprint > pick this GitHub repo.
+# It runs the PANALO! server (server/server.js). No packages to install.
+services:
+  - type: web
+    name: panalo
+    runtime: node
+    plan: free
+    buildCommand: echo "Nothing to build"
+    startCommand: npm start
+    healthCheckPath: /

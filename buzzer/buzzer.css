@@ -256,7 +256,7 @@ button {
   border-radius: 999px;
 }
 
-.fw-form {
+.phone-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -265,24 +265,24 @@ button {
   max-width: 360px;
 }
 
-.fw-form[hidden] {
+.phone-form[hidden] {
   display: none;
 }
 
-.fw-form__label {
+.phone-form__label {
   font-family: var(--font-display);
   font-size: 1.8rem;
   letter-spacing: 0.06em;
   color: var(--color-gold-light);
 }
 
-.fw-form__limit {
+.phone-form__limit {
   margin: 0;
   font-weight: 700;
   color: var(--color-sage);
 }
 
-.fw-form__input {
+.phone-form__input {
   width: 100%;
   padding: 0.2em 0.4em 0.1em;
   font-family: var(--font-display);
@@ -295,10 +295,6 @@ button {
   outline: none;
   -webkit-user-select: text;
   user-select: text;
-}
-
-.fw-form .fm-quiz__next {
-  width: 100%;
 }
 
 .fw-phone__status {
@@ -314,21 +310,8 @@ button {
   color: var(--color-gold-light);
 }
 
-/* ---------- Fast Money (fast-money-phone.js) ---------- */
-.fm-phone {
-  justify-content: flex-start;
-}
-
-.fm-wait {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  margin-top: 16vh;
-  text-align: center;
-}
-
-.fm-wait__title {
+/* ---------- Shared by the join form and Final Wager ---------- */
+.phone-title {
   margin: 0;
   font-family: "Sancreek", Georgia, serif;
   font-size: 2.6rem;
@@ -336,124 +319,42 @@ button {
   text-shadow: 2px 2px 0 var(--color-green-deep), 3px 3px 0 #3d0a24;
 }
 
-.fm-wait__text {
-  max-width: 22em;
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 700;
-  line-height: 1.45;
-  color: var(--color-sage);
-}
-
-.fm-quiz {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.phone-button {
   width: 100%;
-  max-width: 480px;
-}
-
-.fm-quiz__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.fm-quiz__clock {
-  font-family: var(--font-display);
-  font-size: 2.6rem;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  color: var(--color-gold-light);
-}
-
-.fm-quiz__clock.is-urgent {
-  color: #ff8a8a;
-}
-
-.fm-quiz__progress {
-  padding: 0.35em 0.9em 0.25em;
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  letter-spacing: 0.08em;
-  color: var(--color-green-deep);
-  background: var(--color-gold);
-  border-radius: 999px;
-}
-
-.fm-quiz__question {
-  margin: 8px 0 0;
-  font-size: 1.45rem;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.fm-quiz__input {
-  width: 100%;
-  padding: 0.55em 0.8em 0.45em;
-  font-family: var(--font-body);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-green-deep);
-  background: linear-gradient(90deg, #fff4dc, #f9dfae);
-  border: 2px solid var(--color-gold);
-  border-radius: 14px;
-  outline: none;
-  -webkit-user-select: text;
-  user-select: text;
-}
-
-.fm-quiz__input:focus {
-  box-shadow: 0 0 0 4px rgba(244, 199, 106, 0.35);
-}
-
-.fm-quiz__buttons {
-  display: flex;
-  gap: 12px;
-}
-
-.fm-quiz__skip,
-.fm-quiz__next {
-  flex: 1;
   padding: 0.6em 1em 0.45em;
   font-family: var(--font-display);
   font-size: 1.6rem;
   letter-spacing: 0.06em;
+  color: var(--color-cream);
   cursor: pointer;
+  background: linear-gradient(180deg, #e0609a, #c03c7a 55%, #962b5e);
+  border: 2px solid var(--color-gold);
   border-radius: 999px;
 }
 
-.fm-quiz__skip {
-  color: var(--color-gold-light);
-  background: transparent;
-  border: 2px solid rgba(244, 199, 106, 0.6);
+/* ---------- Join a game (no game code in the link) ---------- */
+.join-screen {
+  justify-content: flex-start;
+  padding-top: 10vh;
+  text-align: center;
 }
 
-.fm-quiz__skip:disabled {
-  opacity: 0.35;
+.join-screen__host-link {
+  margin-top: 28px;
+  font-weight: 700;
+  color: var(--color-sage);
 }
 
-.fm-quiz__next {
-  flex: 1.6;
-  color: var(--color-cream);
-  background: linear-gradient(180deg, #e0609a, #c03c7a 55%, #962b5e);
-  border: 2px solid var(--color-gold);
-}
-
-.fm-quiz__note {
-  min-height: 1.2em;
+.join-screen__error {
   margin: 0;
   font-weight: 700;
-  text-align: center;
-  color: var(--color-gold-light);
+  color: #ffd0d0;
 }
 
-/* "The other team already said that!" */
-.fm-quiz__note.is-warning {
-  padding: 10px 12px;
-  color: #4e0e2e;
-  background: #ffb0b0;
-  border-radius: 12px;
+/* The code is letters: shown in capitals as it's typed */
+.join-screen .phone-form__input {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 
 @media (prefers-reduced-motion: reduce) {

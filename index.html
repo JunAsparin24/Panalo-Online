@@ -22,9 +22,10 @@
   <link rel="stylesheet" href="css/buzzer-host.css">
   <link rel="stylesheet" href="css/rules.css">
   <link rel="stylesheet" href="css/final-wager.css">
-  <link rel="stylesheet" href="css/fast-money.css">
   <link rel="stylesheet" href="css/first-pick.css">
   <link rel="stylesheet" href="css/team-maker.css">
+  <link rel="stylesheet" href="css/game-setup.css">
+  <link rel="stylesheet" href="css/background-color.css">
 </head>
 <body data-screen="home">
 
@@ -93,15 +94,18 @@
           <button id="start-button" class="btn btn--primary" type="button">Start Game</button>
         </div>
 
-        <!-- Random team maker (team-maker.js) -->
-        <div class="reveal" style="--reveal-delay: 950ms">
+        <!-- Type in the questions (game-setup.js) and the random team maker (team-maker.js) -->
+        <div class="home-tools reveal" style="--reveal-delay: 950ms">
+          <button id="game-setup-open" class="team-maker-open" type="button">&#9999;&#65039; Set up questions</button>
           <button id="team-maker-open" class="team-maker-open" type="button">&#127922; Make random teams</button>
         </div>
 
-        <!-- Only appears when the buzzer server is running — see buzzer-host.js -->
+        <!-- Only appears when the game is on the website (the buzzer server) — see buzzer-host.js -->
         <button id="home-buzzer-join" class="home-join reveal" style="--reveal-delay: 1000ms" type="button" hidden>
-          Buzzers on! Players join at <strong id="home-buzzer-url"></strong>
+          Players: go to <strong id="home-buzzer-url"></strong> and enter <strong id="home-buzzer-code" class="home-join__code"></strong>
         </button>
+        <!-- For a player who opened the main link instead of their host's game link -->
+        <a id="home-player-link" class="home-player-link reveal" style="--reveal-delay: 1050ms" href="/" hidden>Playing in a friend's game? Join with their code</a>
       </div>
     </section>
 
@@ -207,7 +211,7 @@
     </section>
 
     <!-- ===================================================
-         FINAL WAGER (after the last round, before Fast Money)
+         FINAL WAGER (after the last round)
          Filled in by final-wager.js
          =================================================== -->
     <section id="final-wager-screen" class="screen screen--final-wager" aria-labelledby="final-wager-title">
@@ -236,39 +240,6 @@
         <button id="fw-timer-button" class="btn btn--secondary" type="button">Start timer</button>
         <button id="fw-answer-button" class="btn btn--secondary" type="button">Show answer</button>
         <button id="fw-next-button" class="btn btn--primary" type="button">Next</button>
-      </footer>
-    </section>
-
-    <!-- ===================================================
-         FAST MONEY (after the last round, top two teams)
-         Columns are built by fast-money.js
-         =================================================== -->
-    <section id="fast-money-screen" class="screen screen--fast-money" aria-labelledby="fast-money-title">
-      <header class="fm-header">
-        <h2 id="fast-money-title" class="fm-title title-lettering">Fast Money</h2>
-        <p id="fm-status" class="fm-status" aria-live="polite"></p>
-      </header>
-
-      <!-- While a team answers on their phone, only this shows: who's up and the timer -->
-      <div id="fm-stage" class="fm-stage" hidden>
-        <p id="fm-stage-team" class="fm-stage__team"></p>
-        <p id="fm-stage-timer" class="fm-stage__timer">01:00</p>
-        <p id="fm-stage-text" class="fm-stage__text"></p>
-      </div>
-
-      <div id="fm-board" class="fm-board">
-        <div id="fm-column-0" class="fm-column"></div>
-        <div id="fm-column-1" class="fm-column"></div>
-      </div>
-
-      <footer class="fm-footer">
-        <p id="fm-timer" class="fm-timer" aria-live="off">01:00</p>
-        <div class="fm-controls">
-          <button id="fm-swap-button" class="btn btn--ghost" type="button">Swap order</button>
-          <button id="fm-reset-button" class="btn btn--ghost" type="button">Reset timer</button>
-          <button id="fm-timer-button" class="btn btn--secondary" type="button">Start timer</button>
-          <button id="fm-next-button" class="btn btn--primary" type="button">Next</button>
-        </div>
       </footer>
     </section>
 
@@ -458,13 +429,41 @@
     </div>
   </div>
 
-  <!-- Fast Money: pick which survey answer a team's answer matches -->
-  <div id="fm-picker" class="fm-picker" hidden role="dialog" aria-modal="true" aria-labelledby="fm-picker-question">
-    <div class="fm-picker__card">
-      <p id="fm-picker-question" class="fm-picker__question"></p>
-      <p id="fm-picker-given" class="fm-picker__given"></p>
-      <div id="fm-picker-options" class="fm-picker__options"></div>
-      <button id="fm-picker-cancel" class="btn btn--ghost" type="button">Cancel</button>
+  <!-- ===================================================
+       SET UP GAME (type in the questions) — see game-setup.js
+       =================================================== -->
+  <div id="game-setup" class="game-setup" hidden role="dialog" aria-modal="true" aria-labelledby="game-setup-title">
+    <div class="game-setup__card">
+      <header class="game-setup__header">
+        <h2 id="game-setup-title" class="game-setup__title title-lettering">Set Up Game</h2>
+        <div class="game-setup__tabs" role="tablist" aria-label="Part of the game">
+          <button class="game-setup__tab" type="button" role="tab" data-tab="round1">Round 1 <span class="game-setup__tab-count"></span></button>
+          <button class="game-setup__tab" type="button" role="tab" data-tab="round2">Round 2 <span class="game-setup__tab-count"></span></button>
+          <button class="game-setup__tab" type="button" role="tab" data-tab="finalWager">Final Wager <span class="game-setup__tab-count"></span></button>
+        </div>
+      </header>
+
+      <p id="game-setup-notice" class="game-setup__notice" hidden></p>
+      <p id="game-setup-hint" class="game-setup__hint"></p>
+
+      <!-- The boxes for the chosen tab — built by game-setup.js -->
+      <div id="game-setup-body" class="game-setup__body"></div>
+
+      <footer class="game-setup__footer">
+        <div class="game-setup__file">
+          <button id="game-setup-save" class="btn btn--ghost" type="button">Save to file</button>
+          <button id="game-setup-load" class="btn btn--ghost" type="button">Load file</button>
+          <input id="game-setup-file" type="file" accept=".json,application/json" hidden>
+          <!-- Used by every question's "Add picture" button -->
+          <input id="game-setup-picture-file" type="file" accept="image/*" hidden>
+          <button id="game-setup-clear" class="btn btn--ghost game-setup__clear" type="button">Clear everything</button>
+        </div>
+        <p id="game-setup-status" class="game-setup__status" aria-live="polite"></p>
+        <div class="game-setup__go">
+          <button id="game-setup-done" class="btn btn--secondary" type="button">Done</button>
+          <button id="game-setup-start" class="btn btn--primary" type="button">Start Game</button>
+        </div>
+      </footer>
     </div>
   </div>
 
@@ -485,17 +484,14 @@
     <div class="join-panel__card">
       <h2 id="join-panel-title" class="join-panel__title text-gold">Buzzers</h2>
       <div class="join-panel__options">
-        <!-- Players in the room -->
+        <!-- This game's link: works on any Wi-Fi or mobile data -->
         <div class="join-option">
-          <p class="join-panel__text">On the <strong>same Wi-Fi</strong></p>
-          <div id="buzzer-qr" class="join-panel__qr" aria-hidden="true"></div>
+          <p class="join-panel__text">On your phone, go to</p>
           <p id="buzzer-join-url" class="join-panel__url"></p>
-        </div>
-        <!-- Players anywhere else (other Wi-Fi or mobile data) — see "Online link" in buzzer-server.ps1 -->
-        <div id="online-join" class="join-option" hidden>
-          <p class="join-panel__text"><strong>Anywhere</strong> (other Wi-Fi or data)</p>
-          <div id="online-qr" class="join-panel__qr" aria-hidden="true"></div>
-          <p id="online-join-url" class="join-panel__url join-panel__url--online"></p>
+          <p class="join-panel__room">and enter <strong id="buzzer-room-code"></strong></p>
+          <p class="join-panel__text join-panel__text--small">or scan</p>
+          <div id="buzzer-qr" class="join-panel__qr" aria-hidden="true"></div>
+          <button id="buzzer-copy-link" class="btn btn--ghost join-panel__copy" type="button">Copy link</button>
         </div>
       </div>
       <p id="buzzer-player-count" class="join-panel__count"></p>
@@ -520,6 +516,21 @@
     </svg>
   </button>
 
+  <!-- Background color: the rainbow button and its color wheel — see background-color.js -->
+  <button id="color-button" class="color-toggle" type="button" aria-label="Change the background color" aria-expanded="false" aria-controls="color-panel" title="Background color"></button>
+  <div id="color-panel" class="color-panel" hidden role="dialog" aria-label="Background color">
+    <p class="color-panel__title">Background color</p>
+    <div id="color-wheel" class="color-wheel" role="slider" tabindex="0" aria-label="Color wheel (arrow keys change it)">
+      <span id="color-wheel-marker" class="color-wheel__marker"></span>
+    </div>
+    <label class="color-panel__label" for="color-brightness">Darker &harr; brighter</label>
+    <input id="color-brightness" type="range" min="12" max="65" step="1">
+    <div class="color-panel__actions">
+      <button id="color-reset" class="btn btn--ghost" type="button">Reset to pink</button>
+      <button id="color-done" class="btn btn--primary" type="button">Done</button>
+    </div>
+  </div>
+
   <!-- Full-screen panel that sweeps across between screens -->
   <div id="transition-wipe" class="wipe" hidden aria-hidden="true">
     <div class="wipe__content">
@@ -536,6 +547,7 @@
   <script src="js/game.js"></script>
   <script src="js/teams.js"></script>
   <script src="js/music.js"></script>
+  <script src="js/background-color.js"></script>
   <script src="js/sound-effects.js"></script>
   <script src="js/board.js"></script>
   <script src="js/scoreboard.js"></script>
@@ -544,10 +556,9 @@
   <script src="js/golden-boost.js"></script>
   <script src="js/first-pick.js"></script>
   <script src="js/team-maker.js"></script>
+  <script src="js/game-setup.js"></script>
   <script src="js/rules.js"></script>
   <script src="js/final-wager.js"></script>
-  <script src="js/answer-match.js"></script>
-  <script src="js/fast-money.js"></script>
   <script src="js/buzzer-host.js"></script>
   <script src="js/main.js"></script>
   <script src="js/host-control.js"></script>

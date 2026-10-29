@@ -2,9 +2,14 @@
    buzzer-host.js — The host's side of the phone buzzers.
 
    This only switches on when the game is opened through the
-   buzzer server (double-click "Start Buzzer.bat" — see the
-   server/ folder). Opened as a plain file, the game works
-   exactly as before, just without buzzers.
+   PANALO! server (the website — see server/server.js). Opened
+   as a plain file, the game works the same, just without buzzers.
+
+   Every game on the website is its own ROOM with a short code.
+   This game asks the server for a room when it opens, and gets a
+   secret HOST KEY that proves it's the host (sent with every
+   request). The room is remembered in this browser, so reloading
+   the page keeps the same code and the phones stay connected.
 
    What it does:
    - sends the team list to the server so phones can pick a team
@@ -31,6 +36,7 @@ const buzzerButton = document.getElementById("buzzer-button");
 const buzzerButtonText = document.getElementById("buzzer-button-text");
 const homeBuzzerJoin = document.getElementById("home-buzzer-join");
 const homeBuzzerUrl = document.getElementById("home-buzzer-url");
+const homeBuzzerCode = document.getElementById("home-buzzer-code");
 const buzzAlert = document.getElementById("buzz-alert");
 const buzzAlertTeam = document.getElementById("buzz-alert-team");
 const buzzAlertUnlock = document.getElementById("buzz-alert-unlock");
@@ -41,18 +47,19 @@ const joinPanelClose = document.getElementById("join-panel-close");
 const buzzerQrElement = document.getElementById("buzzer-qr");
 const buzzerJoinUrl = document.getElementById("buzzer-join-url");
 const buzzerPlayerCount = document.getElementById("buzzer-player-count");
-const onlineJoin = document.getElementById("online-join");
-const onlineQrElement = document.getElementById("online-qr");
-const onlineJoinUrl = document.getElementById("online-join-url");
+const buzzerRoomCode = document.getElementById("buzzer-room-code");
+const buzzerCopyButton = document.getElementById("buzzer-copy-link");
 const hostScreenInfo = document.getElementById("host-screen-info");
 const hostScreenUrl = document.getElementById("host-screen-url");
 const hostScreenCode = document.getElementById("host-screen-code");
 
+const ROOM_STORAGE_KEY = "panalo-room";
+
 let isBuzzerConnected = false;
+let buzzerRoom = null;       // { room, hostKey, hostCode } from the server
 let buzzerState = null;      // the latest state from the server
 let lastSeenBuzzId = null;   // to spot a *new* buzz
 let qrCodeMadeFor = "";
-let onlineQrMadeFor = "";
 let lockedOutTeamIds = [];   // teams that can't buzz at all on this question (Golden Boost)
 let lastWrongTeamId = null;  // the last team to get it wrong — waits until another team tries
 let isBuzzWindowOver = false; // the 30 seconds to buzz ran out — nobody can buzz on this question
@@ -96,7 +103,7 @@ async function unlockBuzzers() {
 // details = { round, category, value, question, answer, image, golden } or null.
 function sendQuestionToHostScreen(details) {
   if (!isBuzzerConnected) return;
-  fetch("/api/question", { method: "POST", body: JSON.stringify(details) }).catch(() => {});
+  buzzerRequest("/api/question", { method: "POST", body: JSON.stringify(details) }).catch(() => {});
 }
 
 // A new question (or back to the board): everyone can buzz again,
@@ -157,22 +164,61 @@ function handleAnswerTimeUp(teamId) {
 
 /* ---------- Talking to the server ---------- */
 
+// Every request to the server: adds this game's room code, and the host key
+// that proves it's the host. Used by final-wager.js and host-control.js too.
 async function buzzerRequest(path, options = {}) {
-  const timeout = window.AbortSignal && AbortSignal.timeout ? AbortSignal.timeout(5000) : undefined; // never wait forever
-  const response = await fetch(path, { cache: "no-store", signal: timeout, ...options });
-  if (!response.ok) throw new Error(`Buzzer server answered ${response.status}`);
+  const url = new URL(path, location.origin);
+  url.searchParams.set("room", buzzerRoom.room);
+  const timeout = window.AbortSignal && AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined; // never wait forever
+  const response = await fetch(url, {
+    cache: "no-store",
+    signal: timeout,
+    ...options,
+    headers: { "X-Host-Key": buzzerRoom.hostKey, ...(options.headers || {}) },
+  });
+  if (!response.ok) {
+    const error = new Error(`Server answered ${response.status}`);
+    error.status = response.status;
+    throw error;
+  }
   return response.json();
+}
+
+// Gets this game's room: the one remembered in this browser if the server
+// still has it, otherwise a brand-new one (with a new code)
+async function openRoom() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(ROOM_STORAGE_KEY)) || {}; } catch (error) { /* none saved */ }
+  const response = await fetch("/api/rooms", {
+    method: "POST",
+    cache: "no-store",
+    body: JSON.stringify({ room: saved.room, hostKey: saved.hostKey }),
+  });
+  if (!response.ok) throw new Error(`Server answered ${response.status}`);
+  const room = await response.json();
+  try { localStorage.setItem(ROOM_STORAGE_KEY, JSON.stringify(room)); } catch (error) { /* fine */ }
+  return room;
+}
+
+// The full link, with the code already in it (for the QR code and "Copy link")
+function getJoinUrl() {
+  return `${location.origin}/?room=${buzzerRoom.room}`;
+}
+
+function getHostScreenUrl() {
+  return `${location.origin}/host?room=${buzzerRoom.room}`;
 }
 
 async function connectToBuzzerServer() {
   if (!location.protocol.startsWith("http")) return; // opened as a file: no server
 
   try {
+    buzzerRoom = await openRoom();
     buzzerState = await buzzerRequest("/api/state");
   } catch (error) {
-    // The server may just be busy (or still starting): keep trying for a minute.
-    // Served some other way, without the buzzer server, it simply stays off.
-    if (connectAttempts < 30) {
+    // The server may still be waking up (a free Render server sleeps when
+    // nobody's used it for a while): keep trying for a couple of minutes.
+    if (connectAttempts < 60) {
       connectAttempts += 1;
       setTimeout(connectToBuzzerServer, 2000);
     }
@@ -183,6 +229,7 @@ async function connectToBuzzerServer() {
   lastSeenBuzzId = buzzerState.buzzId;
   buzzerButton.hidden = false;
   homeBuzzerJoin.hidden = false;
+  document.getElementById("home-player-link").hidden = false;
 
   sendTeamsToBuzzer();
   onTeamsChanged(sendTeamsToBuzzer); // teams.js — keep the phones' team list up to date
@@ -191,6 +238,20 @@ async function connectToBuzzerServer() {
   sendQuestionToHostScreen(null);
   showHostScreenInfo();
   pollBuzzerServer();
+}
+
+// The server restarted and forgot this room: get a new one. The phones
+// need the new link (shown in the Buzzers panel).
+async function reopenRoom() {
+  try {
+    buzzerRoom = await openRoom();
+    qrCodeMadeFor = "";
+    sendTeamsToBuzzer();
+    unlockBuzzers();
+    showHostScreenInfo();
+  } catch (error) {
+    // Still offline; the next check tries again
+  }
 }
 
 // Asks again only after the last answer arrives, so requests never pile up
@@ -206,6 +267,7 @@ async function checkForBuzz() {
   } catch (error) {
     buzzerButton.classList.add("is-offline");
     buzzerButtonText.textContent = "Buzzers offline";
+    if (error.status === 404) await reopenRoom();
   }
 }
 
@@ -226,7 +288,6 @@ function handleBuzzerState(state) {
 
   renderBuzzerUi(isNewBuzz);
   handleBuzzersChanged(); // question-screen.js — pauses/resumes the question text
-  handleFastMoneyServerState(state.fastMoney); // fast-money.js — phones answering Fast Money
   handleFinalWagerServerState(state.finalWager); // final-wager.js — which teams have wagered
   if (typeof handleHostControl === "function") handleHostControl(state); // host-control.js — the host's phone controls
 }
@@ -234,8 +295,7 @@ function handleBuzzerState(state) {
 function sendTeamsToBuzzer() {
   if (!isBuzzerConnected) return;
   const teamList = getTeams().map(({ id, name, color }) => ({ id, name, color }));
-  // Sent as plain text so the browser doesn't need an extra permission check
-  fetch("/api/teams", { method: "POST", body: JSON.stringify(teamList) }).catch(() => {});
+  buzzerRequest("/api/teams", { method: "POST", body: JSON.stringify(teamList) }).catch(() => {});
 }
 
 /* ---------- On screen ---------- */
@@ -247,7 +307,7 @@ function renderBuzzerUi(isNewBuzz) {
 
   // Header button
   buzzerButton.classList.toggle("is-locked", Boolean(winner));
-  buzzerButtonText.textContent = winner ? `${winner.name} buzzed` : `Buzzers · ${playerCount}`;
+  buzzerButtonText.textContent = winner ? `${winner.name} buzzed` : `Code ${buzzerRoom.room} · ${playerCount}`;
 
   // "TEAM X BUZZED IN!" banner (the class makes room for it at the top of the screen)
   buzzAlert.hidden = !winner;
@@ -263,58 +323,48 @@ function renderBuzzerUi(isNewBuzz) {
   }
   highlightBuzzedTeam(getBuzzedTeamId()); // scoreboard.js — marks them on the ✓/✗ row
 
-  // How to join: same Wi-Fi, and the online link for everyone else
-  const joinUrl = (buzzerState.joinUrls && buzzerState.joinUrls[0]) || "";
-  const onlineUrl = buzzerState.onlineUrl || "";
-  homeBuzzerUrl.textContent = (joinUrl || "(no Wi-Fi address found)") + (onlineUrl ? "  ·  online link ready" : "");
-  buzzerJoinUrl.textContent = (buzzerState.joinUrls || []).join("  or  ") || "No Wi-Fi address found. Is this laptop on Wi-Fi?";
+  // How to join, Jackbox-style: go to the site, type the code
+  homeBuzzerUrl.textContent = location.host;
+  homeBuzzerCode.textContent = buzzerRoom.room;
+  buzzerJoinUrl.textContent = location.host;
+  buzzerRoomCode.textContent = buzzerRoom.room;
   buzzerPlayerCount.textContent = playerText;
-
-  const onlineStatus = buzzerState.onlineStatus || "off";
-  onlineJoin.hidden = onlineStatus === "off";
-  onlineJoinUrl.textContent =
-    onlineStatus === "on" ? onlineUrl :
-    onlineStatus === "starting" ? "Starting the online link…" :
-    "Online link unavailable. See the buzzer window";
-  if (!joinPanel.hidden) makeJoinQrCodes(); // the online link can arrive while the panel is open
+  if (!joinPanel.hidden) makeJoinQrCode(); // the code changes if the server had to make a new room
 }
 
-// QR codes for both links (needs the qrcodejs library, which loads from the internet)
-function makeJoinQrCodes() {
-  const joinUrl = (buzzerState && buzzerState.joinUrls && buzzerState.joinUrls[0]) || "";
-  const onlineUrl = (buzzerState && buzzerState.onlineUrl) || "";
-
-  if (joinUrl && window.QRCode && qrCodeMadeFor !== joinUrl) {
+// QR code for the join link (needs the qrcodejs library, which loads from the internet)
+function makeJoinQrCode() {
+  const joinUrl = getJoinUrl();
+  if (window.QRCode && qrCodeMadeFor !== joinUrl) {
     buzzerQrElement.innerHTML = "";
     new QRCode(buzzerQrElement, { text: joinUrl, width: 200, height: 200, colorDark: "#5c1238", colorLight: "#ffffff" });
     qrCodeMadeFor = joinUrl;
   }
   buzzerQrElement.hidden = !qrCodeMadeFor;
+}
 
-  if (onlineUrl && window.QRCode && onlineQrMadeFor !== onlineUrl) {
-    onlineQrElement.innerHTML = "";
-    new QRCode(onlineQrElement, { text: onlineUrl, width: 200, height: 200, colorDark: "#5c1238", colorLight: "#ffffff" });
-    onlineQrMadeFor = onlineUrl;
+// "Copy link", to paste into a group chat
+async function copyJoinLink() {
+  try {
+    await navigator.clipboard.writeText(getJoinUrl());
+    buzzerCopyButton.textContent = "Copied ✓";
+  } catch (error) {
+    buzzerCopyButton.textContent = "Couldn't copy";
   }
-  onlineQrElement.hidden = !onlineUrl || onlineQrMadeFor !== onlineUrl;
+  setTimeout(() => { buzzerCopyButton.textContent = "Copy link"; }, 2000);
 }
 
 // The host screen's address and code, shown in the join panel
-async function showHostScreenInfo() {
-  try {
-    const info = await buzzerRequest("/api/host-info");
-    hostScreenUrl.textContent = info.urls[0] || "(no Wi-Fi address found)";
-    hostScreenCode.textContent = info.code;
-    hostScreenInfo.hidden = false;
-  } catch (error) {
-    // An older server without the host screen — nothing to show
-  }
+function showHostScreenInfo() {
+  hostScreenUrl.textContent = getHostScreenUrl();
+  hostScreenCode.textContent = buzzerRoom.hostCode;
+  hostScreenInfo.hidden = false;
 }
 
 /* ---------- Join panel (QR code + link) ---------- */
 
 function openJoinPanel() {
-  makeJoinQrCodes();
+  makeJoinQrCode();
   joinPanel.hidden = false;
   joinPanelClose.focus({ preventScroll: true });
 }
@@ -331,6 +381,7 @@ joinPanelClose.addEventListener("click", closeJoinPanel);
 joinPanel.addEventListener("click", (event) => { if (event.target === joinPanel) closeJoinPanel(); });
 buzzAlertUnlock.addEventListener("click", unlockAfterWrongAnswer);
 joinPanelUnlock.addEventListener("click", unlockAfterWrongAnswer);
+buzzerCopyButton.addEventListener("click", copyJoinLink);
 
 // Listens before the question card does ("true" = capture), so Esc on the
 // join panel only closes the panel, not the question behind it

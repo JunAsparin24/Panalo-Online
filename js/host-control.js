@@ -2,7 +2,7 @@
    host-control.js — Lets the host's phone (/host) steer the game.
 
    From the "Game controls" section on the host screen, the host can:
-     - jump to any round, Final Wager, or Fast Money
+     - jump to any round or Final Wager
      - choose the Final Wager category, and even the exact question
        (or go back to a random pick)
 
@@ -54,7 +54,6 @@ async function runHostCommand(command) {
   if (command.action === "goto") {
     if (command.target === "round") await jumpToRound(command.round);
     if (command.target === "finalWager") await jumpToFinalWager();
-    if (command.target === "fastMoney") await jumpToFastMoney();
   } else if (command.action === "fwPick") {
     setHostFinalWagerPick(command.categoryIndex, command.questionIndex);
   } else if (command.action === "fwRandom") {
@@ -73,7 +72,6 @@ async function leaveCurrentScreen() {
   if (isQuestionScreenOpen) await closeQuestionScreen(false); // question-screen.js — goes back on the board
   if (gameState.activeQuestion) cancelActiveQuestion();      // e.g. mid Golden Boost reveal
   document.getElementById("golden-boost").hidden = true;
-  document.getElementById("fm-picker").hidden = true;
   while (isTransitioning) await wait(50); // main.js — let any wipe finish first
 }
 
@@ -86,7 +84,6 @@ async function jumpToRound(roundNumber) {
   playSong("game"); // music.js
   if (isFromMenu) resetScores(); // teams.js — a fresh game; otherwise scores carry over
   resetFinalWager(); // final-wager.js
-  resetFastMoney();  // fast-money.js
   sendQuestionToHostScreen(null); // buzzer-host.js
 
   gameState.currentRound = roundNumber;
@@ -97,19 +94,11 @@ async function jumpToRound(roundNumber) {
 }
 
 async function jumpToFinalWager() {
+  if (!hasFinalWager()) return; // final-wager.js — no questions set up
   await leaveCurrentScreen();
   playSong("game");
-  resetFastMoney();
   sendQuestionToHostScreen(null);
   await showFinalWagerScreen(); // main.js
-}
-
-async function jumpToFastMoney() {
-  await leaveCurrentScreen();
-  playSong("game");
-  resetFinalWager();
-  sendQuestionToHostScreen(null);
-  await showFastMoneyScreen(); // main.js
 }
 
 /* ---------- Final Wager pick ---------- */
@@ -155,5 +144,5 @@ function publishControlInfo() {
   const key = JSON.stringify(info);
   if (key === lastControlInfoKey) return;
   lastControlInfoKey = key;
-  fetch("/api/control", { method: "POST", body: key }).catch(() => { lastControlInfoKey = ""; });
+  buzzerRequest("/api/control", { method: "POST", body: key }).catch(() => { lastControlInfoKey = ""; }); // buzzer-host.js
 }

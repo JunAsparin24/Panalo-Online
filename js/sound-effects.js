@@ -8,7 +8,6 @@
      playRoundSting(round)  — Round 1: bright horns. Round 2: a
                               bigger fanfare, higher up
      playFinalWagerSting()  — drum roll, then a dark, dramatic chord
-     playFastMoneySting()   — a clock speeding up, then "ka-ching!"
      playBoardClearedSound()— chimes and applause (Round Complete)
      playVictoryFanfare()   — "da-da-da-DAAA!" and applause (Game Over)
 
@@ -19,11 +18,9 @@
      playCorrectSound() / playWrongSound() — ✓ / ✗
      playCountdownTick(urgent) — the last seconds of a timer
 
-   FINAL WAGER & FAST MONEY:
+   FINAL WAGER:
      playCategoryChosenSound(), playWagerLockedSound(),
-     playFinalQuestionSting(), playRevealPopSound(),
-     playStartBell(), playTurnDoneChime(),
-     playSurveyDing() (answer on the board), playBigBuzzer() (miss)
+     playFinalQuestionSting(), playRevealPopSound()
 
    (playGoldenBoostSting, playBuzzSound and playTimesUpSound live in
    music.js.)
@@ -148,34 +145,6 @@ function playFinalWagerSting() {
   playCrash(hit, 0.4, effectsBus);
 }
 
-// FAST MONEY: a clock ticking faster and faster, a quick run up, then "ka-ching!"
-function playFastMoneySting() {
-  const start = startEffect(3.2);
-  if (start === null) return;
-
-  // Ticks that speed up
-  let at = start;
-  for (let i = 0; i < 9; i++) {
-    effectNote({ note: i % 2 ? 84 : 91, time: at, duration: 0.015, wave: "sine", volume: 0.35, release: 0.04 });
-    at += 0.16 - i * 0.012;
-  }
-
-  // Quick synth run up
-  [72, 76, 79, 84, 88, 91].forEach((note, index) => {
-    effectNote({ note, time: at + index * 0.045, duration: 0.04, wave: "square", volume: 0.12, filterFrequency: 4000, release: 0.05 });
-  });
-
-  // "Ka-ching!" — a noise "ka", then two bright bells
-  const ching = at + 0.33;
-  playNoise({ time: ching, volume: 0.35, decay: 0.08, filterType: "highpass", filterFrequency: 3000, output: effectsBus });
-  effectNote({ note: 96, time: ching + 0.05, duration: 0.05, wave: "sine", volume: 0.4, release: 0.9 });
-  effectNote({ note: 100, time: ching + 0.12, duration: 0.05, wave: "sine", volume: 0.35, release: 1.1 });
-
-  playBrass({ notes: [65, 69, 72, 77], time: ching + 0.05, duration: 0.9, volume: 0.5, output: effectsBus });
-  playKick(ching, effectsBus);
-  playCrash(ching, 0.3, effectsBus);
-}
-
 // Round Complete: sparkly chimes and a round of applause
 function playBoardClearedSound() {
   const start = startEffect(3);
@@ -266,7 +235,7 @@ function playCountdownTick(urgent = false) {
 }
 
 /* =========================================================
-   FINAL WAGER & FAST MONEY
+   FINAL WAGER
    ========================================================= */
 
 // Final Wager category picked: a drum hit and a horn stab
@@ -304,41 +273,4 @@ function playRevealPopSound() {
   if (start === null) return;
   slideNote({ from: 350, to: 1100, time: start, duration: 0.12, volume: 0.35 });
   effectNote({ note: 88, time: start + 0.1, duration: 0.05, wave: "sine", volume: 0.3, release: 0.5 });
-}
-
-// Fast Money turn starts: a boxing-style "ding ding" bell
-function playStartBell() {
-  const start = startEffect(1.2);
-  if (start === null) return;
-  [0, 0.3].forEach((offset) => {
-    effectNote({ note: 88, time: start + offset, duration: 0.03, wave: "sine", volume: 0.4, release: 1.1 });
-    effectNote({ note: 95, time: start + offset, duration: 0.03, wave: "sine", volume: 0.2, release: 0.8 });
-  });
-}
-
-// A team finished all its Fast Money answers
-function playTurnDoneChime() {
-  const start = startEffect();
-  if (start === null) return;
-  [84, 88, 91, 96].forEach((note, index) => {
-    effectNote({ note, time: start + index * 0.09, duration: 0.05, wave: "sine", volume: 0.3, release: 0.6 });
-  });
-}
-
-// Fast Money answer is on the board: a big "DING!"
-function playSurveyDing() {
-  const start = startEffect();
-  if (start === null) return;
-  effectNote({ note: 93, time: start, duration: 0.05, wave: "sine", volume: 0.45, release: 1.2 });
-  effectNote({ note: 81, time: start, duration: 0.05, wave: "triangle", volume: 0.25, release: 0.9 });
-  effectNote({ note: 100, time: start + 0.06, duration: 0.03, wave: "sine", volume: 0.12, release: 0.8 });
-}
-
-// Fast Money answer not on the board: a harsh "BZZZT"
-function playBigBuzzer() {
-  const start = startEffect();
-  if (start === null) return;
-  [40, 41].forEach((note) => {
-    effectNote({ note, time: start, duration: 0.6, wave: "sawtooth", volume: 0.3, filterFrequency: 1300, release: 0.08 });
-  });
 }

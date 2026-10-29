@@ -1,6 +1,7 @@
 /* =========================================================
    final-wager.js — FINAL WAGER, after the last round and
-   before Fast Money. The questions are in questions.js.
+   before the final scores. The questions are typed in on the
+   setup screen (game-setup.js / questions.js).
 
      1. CATEGORY: the host presses "Pick a random category"; a
                   highlight spins across the cards and lands on one
@@ -11,7 +12,7 @@
                   timer; teams write their answer on a whiteboard
      4. REVEAL:   for each team the host reveals the wager, then
                   clicks ✓ (+ wager) or ✗ (− wager)
-   Then the top two teams go on to Fast Money.
+   Then it's on to the final scores.
 
    Without the buzzers (game opened as a plain file), the host
    types each team's wager in at the reveal instead.
@@ -43,6 +44,11 @@ let finalWager = null;
 /* =========================================================
    STARTING
    ========================================================= */
+
+// Final Wager is skipped if the host didn't set up any questions for it
+function hasFinalWager() {
+  return finalWagerQuestions.length > 0; // questions.js
+}
 
 function resetFinalWager() {
   const wasOnPhones = finalWager && finalWager.usePhones;
@@ -89,8 +95,7 @@ function getFinalWagerCategory() {
 }
 
 function finalWagerRequest(path, data = {}) {
-  return fetch(path, { method: "POST", body: JSON.stringify(data), cache: "no-store" })
-    .then((response) => response.json())
+  return buzzerRequest(path, { method: "POST", body: JSON.stringify(data) }) // buzzer-host.js
     .catch(() => null);
 }
 
@@ -140,7 +145,7 @@ function renderFinalWager() {
   finalWagerNextButton.textContent =
     step === "wager" ? "Show question →" :
     step === "question" ? "Reveal wagers →" :
-    canPlayFastMoney() ? "Continue to Fast Money →" : "See final scores →"; // fast-money.js
+    "See final scores →";
 
   updateFinalWagerTimer();
 }
@@ -357,16 +362,15 @@ async function handleFinalWagerNext() {
     return;
   }
 
-  // Reveal step done: on to Fast Money (main.js)
+  // Reveal step done: on to the final scores (main.js)
   resetFinalWager();
   sendQuestionToHostScreen(null);
-  continueAfterFinalWager();
+  showGameOverScreen();
 }
 
 async function loadFinalWagers() {
   try {
-    const response = await fetch("/api/fw/results", { cache: "no-store" });
-    const { wagers } = await response.json();
+    const { wagers } = await buzzerRequest("/api/fw/results"); // buzzer-host.js
     Object.entries(wagers || {}).forEach(([teamId, amount]) => { finalWager.wagers[teamId] = Number(amount) || 0; });
   } catch (error) {
     // Couldn't reach the server: the host types the wagers in instead

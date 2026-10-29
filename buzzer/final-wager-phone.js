@@ -63,7 +63,7 @@ fwForm.addEventListener("submit", async (event) => {
   fwAmount.blur();
 
   try {
-    const response = await fetch("/api/fw/wager", {
+    const response = await fetch(apiUrl("/api/fw/wager"), { // buzzer.js
       method: "POST",
       body: JSON.stringify({ teamId: myTeamId, amount }),
     });

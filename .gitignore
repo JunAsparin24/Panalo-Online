@@ -1,3 +1,2 @@
-# The online-link helper is downloaded automatically by the buzzer server (about 50 MB)
-server/cloudflared.exe
-server/cloudflared.exe.part
+# Installed packages (the server doesn't need any, but just in case)
+node_modules/

@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 300 200">
-  <rect width="300" height="200" fill="#ffffff"/>
-  <!-- red disc with a white lowercase "b" -->
-  <circle cx="150" cy="100" r="88" fill="#e4002b"/>
-  <circle cx="156" cy="112" r="34" fill="none" stroke="#ffffff" stroke-width="22"/>
-  <rect x="111" y="38" width="22" height="76" fill="#ffffff"/>
-</svg>

@@ -1,0 +1,12 @@
+{
+  "name": "panalo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PANALO! trivia game show with phone buzzers",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

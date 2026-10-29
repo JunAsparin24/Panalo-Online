@@ -122,6 +122,18 @@ h1 {
   outline: none;
 }
 
+/* The game code (only asked for if it isn't in the link) */
+.code-screen__input--room {
+  width: 7ch;
+  text-transform: uppercase;
+}
+
+.code-screen__input--room::placeholder {
+  font-size: 1.4rem;
+  letter-spacing: 0.05em;
+  text-transform: none;
+}
+
 .code-screen__error {
   font-weight: 700;
   color: #ffb0b0;
@@ -263,55 +275,6 @@ h1 {
   margin: 0;
   font-size: 1.05rem;
   line-height: 1.45;
-}
-
-/* ---------- Fast Money list ---------- */
-.fm-list {
-  margin: 10px 0 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: fm;
-  text-align: left;
-}
-
-.fm-list__item {
-  counter-increment: fm;
-  padding: 14px 4px;
-  border-top: 1px solid rgba(244, 199, 106, 0.35);
-}
-
-.fm-list__question {
-  margin-bottom: 8px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.fm-list__question::before {
-  content: counter(fm) ". ";
-  color: var(--color-gold);
-}
-
-.fm-list__answers {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.fm-list__answers li {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0.3em 0.9em 0.2em;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  letter-spacing: 0.04em;
-  color: var(--color-green-deep);
-  border-radius: 999px;
-  background: linear-gradient(90deg, #fff4dc, #f4c76a);
 }
 
 /* ---------- Who buzzed in ---------- */

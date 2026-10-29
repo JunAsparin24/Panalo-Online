@@ -1,0 +1,134 @@
+/* =========================================================
+   background-color.css — The color wheel (background-color.js)
+   ========================================================= */
+
+/* The round button, just left of the music button */
+.color-toggle {
+  position: fixed;
+  right: calc(clamp(12px, 2vw, 24px) + 58px);
+  bottom: calc(clamp(12px, 2vw, 24px) + env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  /* a rainbow ring around the color that's picked now */
+  background:
+    radial-gradient(circle, var(--picked-color, #b83a72) 0 42%, transparent 44%),
+    conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
+  border: 1px solid var(--color-border-gold);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s var(--ease-out);
+}
+
+.color-toggle:hover {
+  transform: scale(1.08);
+}
+
+.color-toggle:focus-visible {
+  outline: 2px solid var(--color-gold-light);
+  outline-offset: 3px;
+}
+
+/* The pop-up above the buttons */
+.color-panel {
+  position: fixed;
+  right: clamp(12px, 2vw, 24px);
+  bottom: calc(clamp(12px, 2vw, 24px) + 62px + env(safe-area-inset-bottom, 0px));
+  z-index: 61;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(280px, calc(100vw - 24px));
+  padding: 18px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(92, 18, 56, 0.97), rgba(46, 6, 26, 0.98));
+  border: 1px solid var(--color-gold);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.color-panel__title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  color: var(--color-gold-light);
+}
+
+/* Around = the color (red at the top), toward the middle = paler */
+.color-wheel {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  cursor: crosshair;
+  touch-action: none; /* dragging on a touch screen picks, instead of scrolling */
+  border-radius: 50%;
+  background:
+    radial-gradient(circle closest-side, #fff 0%, rgba(255, 255, 255, 0) 100%),
+    conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+.color-wheel:focus-visible {
+  outline: 2px solid var(--color-gold-light);
+  outline-offset: 4px;
+}
+
+.color-wheel__marker {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.color-panel__label {
+  align-self: stretch;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+/* Brightness: dark to bright in the picked color */
+.color-panel input[type="range"] {
+  width: 100%;
+  height: 14px;
+  margin: -4px 0 0;
+  cursor: pointer;
+  appearance: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--slider-dark, #3d0a24), var(--slider-bright, #e46fa5));
+}
+
+.color-panel input[type="range"]::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  appearance: none;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--color-gold);
+}
+
+.color-panel input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--color-gold);
+}
+
+.color-panel__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.color-panel__actions .btn {
+  padding: 0.45em 1.1em 0.35em;
+  font-size: 1.05rem;
+}

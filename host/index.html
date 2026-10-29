@@ -16,10 +16,10 @@
 </head>
 <body>
   <!-- =========================================================
-       HOST SCREEN — for the host's phone only, at http://<laptop>:8080/host
+       HOST SCREEN — for the host's phone only, at /host?room=CODE
        Shows the open question and its answer the moment a tile is
-       picked. Needs the host code shown in the buzzer window and in
-       the game's Buzzers panel. Talks to server/buzzer-server.ps1.
+       picked. Needs the host code shown in the game's Buzzers panel.
+       Talks to server/server.js.
        ========================================================= -->
   <header class="top-bar">
     <span class="top-bar__title">PANALO!</span>
@@ -31,9 +31,10 @@
   <!-- Step 1: enter the host code -->
   <form id="code-screen" class="code-screen" hidden>
     <h1 class="code-screen__heading">Host code</h1>
-    <p class="code-screen__note">It's in the black buzzer window on the laptop, and in the game's <strong>Buzzers</strong> panel.</p>
+    <p class="code-screen__note">It's in the game's <strong>Buzzers</strong> panel, under "Host screen".</p>
+    <input id="room-input" class="code-screen__input code-screen__input--room" type="text" maxlength="4" autocomplete="off" autocapitalize="characters" placeholder="Game code" aria-label="Game code" hidden>
     <input id="code-input" class="code-screen__input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Host code">
-    <p id="code-error" class="code-screen__error" hidden>That code didn't work. Try again.</p>
+    <p id="code-error" class="code-screen__error" hidden>That didn't work. Check the game code and host code.</p>
     <button class="code-screen__button" type="submit">Open host screen</button>
   </form>
 
@@ -65,12 +66,6 @@
         <dd id="word-sentence"></dd>
       </dl>
     </article>
-
-    <!-- Fast Money: all five questions and their survey answers -->
-    <section id="fast-money-card" class="card" hidden>
-      <p class="card__value">Fast Money</p>
-      <ol id="fast-money-list" class="fm-list"></ol>
-    </section>
 
     <p id="buzz" class="buzz" hidden></p>
 

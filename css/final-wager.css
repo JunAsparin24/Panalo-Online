@@ -271,7 +271,11 @@
   color: var(--color-green-deep);
   background: linear-gradient(90deg, #fff4dc, #f4c76a);
   border: 1px solid transparent;
-  animation: fm-points-pop 0.5s cubic-bezier(0.2, 1.6, 0.4, 1); /* keyframes in fast-money.css */
+  animation: fw-wager-pop 0.5s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+@keyframes fw-wager-pop {
+  from { transform: scale(0.3); opacity: 0; }
 }
 
 .fw-team__wager-input {

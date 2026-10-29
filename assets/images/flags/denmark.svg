@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="740" height="560" viewBox="0 0 37 28">
-  <!-- red field with a white Nordic cross, set toward the flagpole -->
-  <rect width="37" height="28" fill="#c8102e"/>
-  <rect x="12" width="4" height="28" fill="#ffffff"/>
-  <rect y="12" width="37" height="4" fill="#ffffff"/>
-</svg>
