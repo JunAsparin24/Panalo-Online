@@ -54,8 +54,8 @@
   font-family: var(--font-title);
   color: var(--color-cream);
   text-shadow:
-    3px 3px 0 #6e1844,
-    5px 5px 0 #5c1238,
+    3px 3px 0 #530e17,
+    5px 5px 0 #420b13,
     8px 10px 18px rgba(0, 0, 0, 0.35);
 }
 
@@ -91,10 +91,10 @@
   font-size: clamp(1.2rem, 2.6vw, 1.7rem);
   letter-spacing: 0.04em;
   color: var(--color-gold-light);
-  text-shadow: 0 2px 0 rgba(66, 9, 38, 0.8);
+  text-shadow: 0 2px 0 rgba(47, 6, 11, 0.8);
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255, 227, 163, 0.35);
-  background: linear-gradient(180deg, #d04a88 0%, var(--color-green-mid) 45%, var(--color-green-dark) 100%);
+  background: linear-gradient(180deg, #932634 0%, var(--color-green-mid) 45%, var(--color-green-dark) 100%);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -131,8 +131,8 @@
   font-family: var(--font-title);
   color: var(--color-cream);
   text-shadow:
-    3px 3px 0 #6e1844,
-    5px 5px 0 #5c1238,
+    3px 3px 0 #530e17,
+    5px 5px 0 #420b13,
     8px 10px 18px rgba(0, 0, 0, 0.35);
 }
 

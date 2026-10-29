@@ -337,7 +337,7 @@ function makeJoinQrCode() {
   const joinUrl = getJoinUrl();
   if (window.QRCode && qrCodeMadeFor !== joinUrl) {
     buzzerQrElement.innerHTML = "";
-    new QRCode(buzzerQrElement, { text: joinUrl, width: 200, height: 200, colorDark: "#5c1238", colorLight: "#ffffff" });
+    new QRCode(buzzerQrElement, { text: joinUrl, width: 200, height: 200, colorDark: "#420b13", colorLight: "#ffffff" });
     qrCodeMadeFor = joinUrl;
   }
   buzzerQrElement.hidden = !qrCodeMadeFor;

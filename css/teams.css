@@ -23,7 +23,7 @@
   gap: 4px;
   padding: 4px 6px 4px 12px;
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(143, 36, 89, 0.95), rgba(82, 16, 50, 0.95));
+  background: linear-gradient(180deg, rgba(97, 19, 29, 0.95), rgba(59, 12, 18, 0.95));
   border: 1px solid var(--color-border-gold);
   /* coloured stripe on the left edge */
   box-shadow: inset 5px 0 0 var(--team-color), 0 6px 16px rgba(0, 0, 0, 0.35);
@@ -38,7 +38,7 @@
   padding: 0;
   font-size: 1.05rem;
   line-height: 1;
-  color: rgba(248, 198, 218, 0.35);
+  color: rgba(220, 181, 186, 0.35);
   cursor: pointer;
   background: transparent;
   border: 0;
@@ -105,7 +105,7 @@
 
 .team-chip__name:focus {
   outline: none;
-  background: rgba(46, 6, 26, 0.6);
+  background: rgba(28, 3, 7, 0.6);
   border-color: var(--color-gold);
 }
 
@@ -117,7 +117,7 @@
   line-height: 1;
   color: var(--team-color);
   text-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
-  background: rgba(46, 6, 26, 0.55);
+  background: rgba(28, 3, 7, 0.55);
   border: 1px solid transparent;
   border-radius: 999px;
   cursor: pointer;
@@ -143,7 +143,7 @@
   font-family: var(--font-display);
   font-size: 1.3rem;
   color: var(--color-gold-light);
-  background: rgba(46, 6, 26, 0.8);
+  background: rgba(28, 3, 7, 0.8);
   border: 1px solid var(--color-gold);
   border-radius: 999px;
 }
@@ -156,7 +156,7 @@
   padding: 0 6px;
   font-size: 1rem;
   line-height: 1;
-  color: rgba(248, 198, 218, 0.6);
+  color: rgba(220, 181, 186, 0.6);
   cursor: pointer;
   background: transparent;
   border: 0;
@@ -190,7 +190,7 @@
 }
 
 .scoreboard__add:hover {
-  background: rgba(192, 60, 122, 0.3);
+  background: rgba(126, 25, 38, 0.3);
   border-style: solid;
 }
 
@@ -225,7 +225,7 @@
   gap: 6px;
   padding: 5px 6px 5px 14px;
   border-radius: 999px;
-  background: rgba(46, 6, 26, 0.55);
+  background: rgba(28, 3, 7, 0.55);
   border: 1px solid var(--color-border-sage);
   box-shadow: inset 5px 0 0 var(--team-color);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -284,7 +284,7 @@
 
 /* On the gold Golden Boost card */
 .question-card.is-golden .award {
-  background: rgba(92, 18, 56, 0.85);
+  background: rgba(66, 11, 19, 0.85);
 }
 
 /* =========================================================
@@ -306,7 +306,7 @@
   gap: 14px;
   padding: 8px 18px 6px 12px;
   border-radius: var(--radius-md);
-  background: rgba(92, 18, 56, 0.7);
+  background: rgba(66, 11, 19, 0.7);
   border: 1px solid var(--color-border-sage);
   box-shadow: inset 5px 0 0 var(--team-color);
 }
@@ -344,7 +344,7 @@
 /* Leader(s) get a gold frame */
 .standing.is-leader {
   border-color: var(--color-gold);
-  background: linear-gradient(90deg, rgba(244, 199, 106, 0.18), rgba(92, 18, 56, 0.7));
+  background: linear-gradient(90deg, rgba(244, 199, 106, 0.18), rgba(66, 11, 19, 0.7));
 }
 
 .standing.is-leader .standing__place {

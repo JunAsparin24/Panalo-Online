@@ -15,8 +15,8 @@
   text-transform: uppercase;
 }
 
-/* ---------- Anniversary Edition ribbon ---------- */
-.anniv-ribbon {
+/* ---------- Friendsgiving Edition ribbon ---------- */
+.edition-ribbon {
   position: relative;
   z-index: 0; /* keeps the ribbon tails tucked behind it */
   display: inline-flex;
@@ -28,66 +28,68 @@
   font-size: clamp(1.05rem, 2.4vw, 1.5rem);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #5c1238;
-  background: linear-gradient(180deg, #fff1f7 0%, #ffc4dc 100%);
+  color: #420b13;
+  background: linear-gradient(180deg, #fff6e6 0%, #f6d595 100%);
   border-radius: 4px;
   box-shadow:
-    0 6px 16px rgba(61, 10, 36, 0.35),
+    0 6px 16px rgba(46, 7, 12, 0.35),
     inset 0 0 0 1px rgba(244, 199, 106, 0.9),
     inset 0 0 0 3px rgba(255, 255, 255, 0.5);
 }
 
 /* Folded ribbon tails on each side */
-.anniv-ribbon::before,
-.anniv-ribbon::after {
+.edition-ribbon::before,
+.edition-ribbon::after {
   content: "";
   position: absolute;
   top: 0.35em;
   z-index: -1;
   width: 1.4em;
   height: 100%;
-  background: #f29ac0;
+  background: #d9953f;
 }
 
-.anniv-ribbon::before {
+.edition-ribbon::before {
   left: -0.9em;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 35% 50%);
 }
 
-.anniv-ribbon::after {
+.edition-ribbon::after {
   right: -0.9em;
   clip-path: polygon(0 0, 100% 0, 65% 50%, 100% 100%, 0 100%);
 }
 
-.anniv-ribbon__text {
+.edition-ribbon__text {
   padding-left: 0.22em; /* balances the letter-spacing */
 }
 
-.anniv-ribbon__heart {
-  color: #e0457f;
-  font-size: 0.9em;
-  letter-spacing: 0;
-  animation: heart-beat 1.6s ease-in-out infinite;
+/* An autumn leaf on each side of the words, gently swaying */
+.edition-ribbon__leaf {
+  width: 1em;
+  height: 1em;
+  background: #c4561f;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l1.6 3.6 2.4-1.2-.6 4.2 3.4-2.2.2 2.6 2.6-.4-1.6 3.4 1.8 1.2-4.6 2.4.6 1.8-4.6-.6V22h-1.2v-3.2l-4.6.6.6-1.8-4.6-2.4 1.8-1.2L3 10.6l2.6.4.2-2.6 3.4 2.2-.6-4.2 2.4 1.2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l1.6 3.6 2.4-1.2-.6 4.2 3.4-2.2.2 2.6 2.6-.4-1.6 3.4 1.8 1.2-4.6 2.4.6 1.8-4.6-.6V22h-1.2v-3.2l-4.6.6.6-1.8-4.6-2.4 1.8-1.2L3 10.6l2.6.4.2-2.6 3.4 2.2-.6-4.2 2.4 1.2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  animation: leaf-sway 3s ease-in-out infinite alternate;
 }
 
-.anniv-ribbon__heart:last-child {
-  animation-delay: 0.8s;
+.edition-ribbon__leaf:last-child {
+  animation-delay: -1.5s;
 }
 
-@keyframes heart-beat {
-  0%, 60%, 100% { transform: scale(1); }
-  20%           { transform: scale(1.3); }
-  40%           { transform: scale(0.95); }
+@keyframes leaf-sway {
+  from { transform: rotate(-14deg); }
+  to   { transform: rotate(14deg); }
 }
 
-/* ---------- Floating hearts and sparkles around the card ---------- */
-.anniv-floaters {
+/* ---------- Falling leaves and sparkles around the card ---------- */
+.card-floaters {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.anniv-floater {
+.card-floater {
   position: absolute;
   left: var(--fx);
   top: var(--fy);
@@ -97,14 +99,15 @@
   animation: floater-bob 4.5s ease-in-out var(--fd) infinite;
 }
 
-.anniv-floater--heart {
-  background: #ff9cc6;
-  filter: drop-shadow(0 0 6px rgba(255, 156, 198, 0.8));
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4 6.3 4c2.3 0 3.8 1.3 5.7 3.4C13.9 5.3 15.4 4 17.7 4c4 0 5.9 4.4 4.3 7.7C19.5 16.4 12 21 12 21z'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4 6.3 4c2.3 0 3.8 1.3 5.7 3.4C13.9 5.3 15.4 4 17.7 4c4 0 5.9 4.4 4.3 7.7C19.5 16.4 12 21 12 21z'/%3E%3C/svg%3E") center / contain no-repeat;
+/* Leaves in autumn colors (--leaf-color is set on each one in index.html) */
+.card-floater--leaf {
+  background: var(--leaf-color, #d9772b);
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.35));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l1.6 3.6 2.4-1.2-.6 4.2 3.4-2.2.2 2.6 2.6-.4-1.6 3.4 1.8 1.2-4.6 2.4.6 1.8-4.6-.6V22h-1.2v-3.2l-4.6.6.6-1.8-4.6-2.4 1.8-1.2L3 10.6l2.6.4.2-2.6 3.4 2.2-.6-4.2 2.4 1.2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l1.6 3.6 2.4-1.2-.6 4.2 3.4-2.2.2 2.6 2.6-.4-1.6 3.4 1.8 1.2-4.6 2.4.6 1.8-4.6-.6V22h-1.2v-3.2l-4.6.6.6-1.8-4.6-2.4 1.8-1.2L3 10.6l2.6.4.2-2.6 3.4 2.2-.6-4.2 2.4 1.2z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-.anniv-floater--spark {
+.card-floater--spark {
   background: var(--color-gold-light);
   filter: drop-shadow(0 0 6px rgba(255, 227, 163, 0.9));
   clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
@@ -116,8 +119,14 @@
 }
 
 @media (max-width: 520px) {
-  .anniv-ribbon {
+  .edition-ribbon {
     letter-spacing: 0.12em;
     padding: 0.4em 1.1em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edition-ribbon__leaf {
+    animation: none;
   }
 }

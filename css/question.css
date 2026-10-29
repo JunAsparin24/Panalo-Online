@@ -31,7 +31,7 @@ body.is-question-open .board-footer {
 .question-screen__backdrop {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(92, 18, 56, 0.55), rgba(20, 3, 12, 0.85));
+  background: radial-gradient(ellipse at center, rgba(66, 11, 19, 0.55), rgba(12, 2, 3, 0.85));
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -50,12 +50,12 @@ body.is-question-open .board-footer {
   padding: clamp(22px, 4vh, 48px) clamp(20px, 4vw, 64px);
   border-radius: var(--radius-lg);
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(224, 96, 154, 0.35), transparent 60%),
-    linear-gradient(180deg, #8f2459 0%, #6a1a42 55%, #4a0d2c 100%);
+    radial-gradient(ellipse at 50% 0%, rgba(165, 51, 66, 0.35), transparent 60%),
+    linear-gradient(180deg, #61131d 0%, #4a0e16 55%, #36080e 100%);
   border: 1px solid var(--color-gold);
   box-shadow:
     0 40px 100px rgba(0, 0, 0, 0.65),
-    0 0 60px rgba(192, 60, 122, 0.35),
+    0 0 60px rgba(126, 25, 38, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
 
   /* Start state for the open animation */
@@ -95,7 +95,7 @@ body.is-question-open .board-footer {
   color: var(--color-sage);
   cursor: pointer;
   border-radius: 50%;
-  background: rgba(46, 6, 26, 0.5);
+  background: rgba(28, 3, 7, 0.5);
   border: 1px solid var(--color-border-sage);
   transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ease-out);
 }
@@ -256,7 +256,7 @@ body.is-question-open .board-footer {
   border-radius: 6px;
   /* A thin light edge so white flags (like Japan's) stand out from the card */
   border: 2px solid rgba(255, 244, 220, 0.6);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(224, 96, 154, 0.35);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(165, 51, 66, 0.35);
   transition: max-height 0.4s var(--ease-out), opacity 0.4s ease;
 }
 
@@ -426,7 +426,7 @@ body.is-question-open .board-footer {
   color: var(--color-cream);
   cursor: pointer;
   border-radius: 14px;
-  background: rgba(46, 6, 26, 0.7);
+  background: rgba(28, 3, 7, 0.7);
   border: 1px solid var(--color-border-gold);
   transition: border-color 0.2s ease, opacity 0.2s ease;
 }
@@ -502,7 +502,7 @@ body.is-question-open .board-footer {
 .buzz-window.is-over {
   cursor: default;
   border-color: #ff7a7a;
-  background: rgba(128, 28, 80, 0.85);
+  background: rgba(90, 16, 24, 0.85);
 }
 
 .buzz-window.is-over .buzz-window__label {
@@ -626,7 +626,7 @@ body.is-question-open .board-footer {
   letter-spacing: 0.06em;
   color: var(--color-sage);
   border-radius: 999px;
-  background: rgba(46, 6, 26, 0.55);
+  background: rgba(28, 3, 7, 0.55);
   border: 1px solid var(--color-border-sage);
   transition: background 0.3s ease, color 0.3s ease, transform 0.3s var(--ease-out);
 }
@@ -637,7 +637,7 @@ body.is-question-open .board-footer {
 }
 
 .song-step.is-current {
-  color: #5c1238;
+  color: #420b13;
   background: linear-gradient(180deg, var(--color-gold-light), var(--color-gold));
   border-color: var(--color-gold);
   transform: scale(1.12);
@@ -651,7 +651,7 @@ body.is-question-open .board-footer {
   height: 16px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(46, 6, 26, 0.7);
+  background: rgba(28, 3, 7, 0.7);
   border: 1px solid var(--color-border-sage);
 }
 
@@ -664,7 +664,7 @@ body.is-question-open .board-footer {
 
 .song-bar__unlocked {
   min-width: 6px;
-  background: rgba(248, 198, 218, 0.28);
+  background: rgba(220, 181, 186, 0.28);
   transition: width 0.5s var(--ease-out);
 }
 
@@ -749,7 +749,7 @@ body.is-question-open .board-footer {
   border-radius: 0.28em;
   background:
     radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.18), transparent 65%),
-    linear-gradient(180deg, rgba(224, 96, 154, 0.45), rgba(92, 18, 56, 0.6));
+    linear-gradient(180deg, rgba(165, 51, 66, 0.45), rgba(66, 11, 19, 0.6));
   border: 2px solid rgba(244, 199, 106, 0.6);
   box-shadow:
     0 14px 30px rgba(0, 0, 0, 0.4),

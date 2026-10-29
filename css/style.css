@@ -6,21 +6,21 @@
    ========================================================= */
 
 /* ---------- Design tokens ----------
-   The PANALO! look: rich pink, gold and cream (Anniversary Edition).
+   The PANALO! look: deep crimson, gold and cream (Friendsgiving Edition).
    (The "green" in some names below is left over from the original
-   green theme; those colors are now shades of pink.) */
+   green theme; those colors are now shades of red.) */
 :root {
   /* Backgrounds */
-  --color-bg: #b83a72;          /* the main pink */
-  --color-bg-darkest: #3d0a24;
-  --color-bg-dark: #7a1d4b;
-  --color-green-deep: #5c1238;
-  --color-green: #8f2459;
+  --color-bg: #711a26;          /* the main red */
+  --color-bg-darkest: #2a060b;
+  --color-bg-dark: #4a0e16;
+  --color-green-deep: #420b13;
+  --color-green: #61131d;
 
-  /* Pinks (buttons, tiles) */
-  --color-green-bright: #e0609a;
-  --color-green-mid: #c03c7a;
-  --color-green-dark: #962b5e;
+  /* Reds (buttons, tiles) */
+  --color-green-bright: #a53342;
+  --color-green-mid: #7e1926;
+  --color-green-dark: #620e19;
 
   /* Gold / cream */
   --color-gold: #f4c76a;
@@ -29,9 +29,9 @@
   --color-cream: #fff4dc;
 
   /* Soft accents & borders */
-  --color-sage: #f8c6da;
+  --color-sage: #dcb5ba;
   --color-border-gold: rgba(244, 199, 106, 0.45);
-  --color-border-sage: rgba(248, 198, 218, 0.3);
+  --color-border-sage: rgba(220, 181, 186, 0.3);
 
   /* Fonts. --font-title is the ornate PANALO! lettering, for big titles only */
   --font-title: "Sancreek", "Rockwell Extra Bold", Georgia, serif;
@@ -40,13 +40,13 @@
 
   /* The animated background (.stage). background-color.js changes
      these when a color is picked on the color wheel */
-  --stage-top: #e46fa5;    /* the glow at the top left */
+  --stage-top: #852431;    /* the glow at the top left */
   --stage-main: var(--color-bg);
-  --stage-mid: #9c2c62;
+  --stage-mid: #5e151e;
   --stage-bottom: var(--color-bg-dark);
-  --stage-deep: #6b1640;   /* the dark glow at the bottom */
+  --stage-deep: #500f18;   /* the dark glow at the bottom */
   --stage-glow: var(--color-green-mid);
-  --stage-glow-light: #ff8fc0;
+  --stage-glow-light: #841826;
 
   /* Shape & motion */
   --radius-sm: 10px;
@@ -132,10 +132,10 @@ input[type="number"]::-webkit-outer-spin-button {
     -2px 0 0 var(--color-cream),
     2px 0 0 var(--color-cream),
     /* stepped shadow */
-    3px 3px 0 #6e1844,
-    4px 4px 0 #6e1844,
-    5px 5px 0 #5c1238,
-    6px 6px 0 #5c1238,
+    3px 3px 0 #530e17,
+    4px 4px 0 #530e17,
+    5px 5px 0 #420b13,
+    6px 6px 0 #420b13,
     8px 10px 18px rgba(0, 0, 0, 0.35);
 }
 
@@ -209,8 +209,8 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: clamp(36px, 6vh, 64px) clamp(22px, 5vw, 64px);
   text-align: center;
   border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, rgba(184, 58, 114, 0.92), rgba(138, 36, 86, 0.94));
-  border: 1px solid rgba(61, 10, 36, 0.6);
+  background: linear-gradient(160deg, rgba(126, 30, 43, 0.92), rgba(100, 21, 31, 0.94));
+  border: 1px solid rgba(46, 7, 12, 0.6);
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -288,7 +288,7 @@ input[type="number"]::-webkit-outer-spin-button {
   max-width: 200px;
   padding: 14px 12px 12px;
   border-radius: var(--radius-md);
-  background: rgba(92, 18, 56, 0.6);
+  background: rgba(66, 11, 19, 0.6);
   border: 1px solid var(--color-border-sage);
 }
 
@@ -436,7 +436,7 @@ body[data-screen="game"] .stage {
   top: -10vh;
   width: 34vw;
   height: 130vh;
-  background: linear-gradient(180deg, rgba(255, 232, 190, 0.13), rgba(248, 198, 218, 0.05) 45%, transparent 75%);
+  background: linear-gradient(180deg, rgba(255, 232, 190, 0.13), rgba(220, 181, 186, 0.05) 45%, transparent 75%);
   clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
   transform-origin: 50% 0;
   mix-blend-mode: screen;
@@ -470,8 +470,8 @@ body[data-screen="game"] .stage {
   bottom: 0;
   height: 45vh;
   background-image:
-    linear-gradient(rgba(255, 210, 228, 0.18) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 210, 228, 0.18) 1px, transparent 1px);
+    linear-gradient(rgba(220, 181, 186, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(220, 181, 186, 0.18) 1px, transparent 1px);
   background-size: 70px 70px;
   transform: perspective(420px) rotateX(58deg);
   transform-origin: 50% 100%;
@@ -541,7 +541,7 @@ body[data-screen="game"] .stage {
   padding: 0.62em 2.3em 0.5em;
   font-size: clamp(1.7rem, 3.2vw, 2.4rem);
   color: var(--color-cream);
-  text-shadow: 0 2px 0 rgba(64, 8, 36, 0.6);
+  text-shadow: 0 2px 0 rgba(41, 5, 10, 0.6);
   background: linear-gradient(180deg, var(--color-green-bright) 0%, var(--color-green-mid) 55%, var(--color-green-dark) 100%);
   border: 2px solid var(--color-gold);
   border-radius: 999px;
@@ -549,7 +549,7 @@ body[data-screen="game"] .stage {
     0 12px 30px rgba(0, 0, 0, 0.45),
     0 0 0 5px rgba(244, 199, 106, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -5px 12px rgba(64, 8, 36, 0.4);
+    inset 0 -5px 12px rgba(41, 5, 10, 0.4);
 }
 
 /* Light "shine" that sweeps across on hover */
@@ -571,9 +571,9 @@ body[data-screen="game"] .stage {
   box-shadow:
     0 18px 40px rgba(0, 0, 0, 0.5),
     0 0 0 6px rgba(244, 199, 106, 0.16),
-    0 0 36px rgba(224, 96, 154, 0.65),
+    0 0 36px rgba(165, 51, 66, 0.65),
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 0 -5px 12px rgba(64, 8, 36, 0.4);
+    inset 0 -5px 12px rgba(41, 5, 10, 0.4);
 }
 
 .btn--primary:hover::before {
@@ -590,16 +590,16 @@ body[data-screen="game"] .stage {
   padding: 0.62em 1.8em 0.5em;
   font-size: clamp(1.3rem, 2.4vw, 1.8rem);
   color: var(--color-gold-light);
-  background: rgba(92, 18, 56, 0.6);
+  background: rgba(66, 11, 19, 0.6);
   border: 1px solid var(--color-border-gold);
   border-radius: 999px;
 }
 
 .btn--secondary:hover {
   transform: translateY(-2px);
-  background: rgba(192, 60, 122, 0.35);
+  background: rgba(126, 25, 38, 0.35);
   border-color: var(--color-gold);
-  box-shadow: 0 0 22px rgba(224, 96, 154, 0.4);
+  box-shadow: 0 0 22px rgba(165, 51, 66, 0.4);
 }
 
 .btn--secondary:active {
@@ -619,14 +619,14 @@ body[data-screen="game"] .stage {
   padding: 0.45em 1em 0.35em;
   font-size: 1.05rem;
   color: var(--color-gold-light);
-  background: rgba(92, 18, 56, 0.6);
+  background: rgba(66, 11, 19, 0.6);
   border: 1px solid var(--color-border-gold);
   border-radius: 999px;
 }
 
 .btn--ghost:hover {
   transform: translateY(-1px);
-  background: rgba(192, 60, 122, 0.35);
+  background: rgba(126, 25, 38, 0.35);
   border-color: var(--color-gold);
 }
 
@@ -654,7 +654,7 @@ body[data-screen="game"] .stage {
   cursor: pointer;
   color: var(--color-gold-light);
   border-radius: 50%;
-  background: rgba(92, 18, 56, 0.85);
+  background: rgba(66, 11, 19, 0.85);
   border: 1px solid var(--color-border-gold);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   transition: transform 0.2s var(--ease-out), border-color 0.2s ease, color 0.2s ease;
@@ -677,7 +677,7 @@ body[data-screen="game"] .stage {
 
 /* Muted: dimmed, with a slash through the note */
 .music-toggle.is-off {
-  color: rgba(248, 198, 218, 0.55);
+  color: rgba(220, 181, 186, 0.55);
 }
 
 .music-toggle.is-off::after {
@@ -705,7 +705,7 @@ body[data-screen="game"] .stage {
   padding: 24px;
   background:
     repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 22px),
-    radial-gradient(ellipse at center, #b83a72 0%, #6a1a42 55%, #3d0a24 100%);
+    radial-gradient(ellipse at center, #711a26 0%, #4a0e16 55%, #2a060b 100%);
   transform: translateX(-101%);
 }
 

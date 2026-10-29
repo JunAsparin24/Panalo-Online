@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: radial-gradient(circle at center, rgba(120, 72, 8, 0.97) 0%, rgba(40, 20, 4, 0.98) 45%, rgba(24, 3, 14, 0.99) 100%);
+  background: radial-gradient(circle at center, rgba(120, 72, 8, 0.97) 0%, rgba(40, 20, 4, 0.98) 45%, rgba(15, 2, 4, 0.99) 100%);
   opacity: 0;
 }
 
@@ -242,7 +242,7 @@
   color: var(--color-cream);
   cursor: pointer;
   border-radius: 999px;
-  background: rgba(92, 18, 56, 0.85);
+  background: rgba(66, 11, 19, 0.85);
   border: 2px solid transparent;
   box-shadow: inset 5px 0 0 var(--team-color);
   transition: transform 0.15s var(--ease-out), border-color 0.2s ease, background 0.2s ease;

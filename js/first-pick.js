@@ -85,7 +85,7 @@ function wheelPoint(degrees, radius) {
 function textColorFor(hex) {
   const value = parseInt(String(hex).replace("#", ""), 16);
   const r = (value >> 16) & 255, g = (value >> 8) & 255, b = value & 255;
-  return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? "#2a0616" : "#fff8ec";
+  return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? "#2a060b" : "#fff8ec";
 }
 
 function buildWheel() {

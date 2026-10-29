@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: radial-gradient(ellipse at center, rgba(92, 18, 56, 0.75), rgba(20, 3, 12, 0.92));
+  background: radial-gradient(ellipse at center, rgba(66, 11, 19, 0.75), rgba(12, 2, 3, 0.92));
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -23,7 +23,7 @@
   padding: clamp(18px, 3.5vh, 40px) clamp(20px, 4vw, 56px);
   text-align: center;
   border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, rgba(184, 58, 114, 0.95), rgba(138, 36, 86, 0.97));
+  background: linear-gradient(160deg, rgba(126, 30, 43, 0.95), rgba(100, 21, 31, 0.97));
   border: 1px solid var(--color-gold);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 }
@@ -50,7 +50,7 @@
   letter-spacing: 0.06em;
   color: var(--color-cream);
   border-radius: var(--radius-md);
-  background: rgba(46, 6, 26, 0.6);
+  background: rgba(28, 3, 7, 0.6);
   border: 3px solid var(--team-color, var(--color-gold));
   transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
 }
@@ -59,14 +59,14 @@
 .first-pick__team.is-highlighted {
   transform: scale(1.08);
   background: var(--team-color, var(--color-gold));
-  color: #1a0410;
+  color: #1a0406;
   box-shadow: 0 0 30px var(--team-color, var(--color-gold));
 }
 
 /* The winner */
 .first-pick__team.is-picked {
   background: var(--team-color, var(--color-gold));
-  color: #1a0410;
+  color: #1a0406;
   box-shadow: 0 0 0 4px var(--color-gold-light), 0 0 50px var(--team-color, var(--color-gold));
   animation: first-pick-win 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform: scale(1.12);
@@ -170,7 +170,7 @@
 
 .wheel__pointer {
   fill: var(--color-cream);
-  stroke: #5c1238;
+  stroke: #420b13;
   stroke-width: 2;
   stroke-linejoin: round;
   transform-origin: 0 -112px;

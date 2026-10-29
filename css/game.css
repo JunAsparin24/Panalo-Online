@@ -36,7 +36,7 @@
   letter-spacing: 0.04em;
   white-space: nowrap;
   /* at this small size the cream outline gets muddy, so just gold + shadow */
-  text-shadow: 2px 2px 0 #5c1238, 3px 3px 0 #3d0a24;
+  text-shadow: 2px 2px 0 #420b13, 3px 3px 0 #2a060b;
 }
 
 .round-badge {
@@ -66,7 +66,7 @@
   gap: 0.8em;
   padding: 0.4em 1.1em;
   border-radius: var(--radius-md);
-  background: linear-gradient(180deg, rgba(143, 36, 89, 0.95), rgba(82, 16, 50, 0.95));
+  background: linear-gradient(180deg, rgba(97, 19, 29, 0.95), rgba(59, 12, 18, 0.95));
   border: 1px solid var(--color-border-gold);
   box-shadow:
     0 8px 22px rgba(0, 0, 0, 0.4),
@@ -100,11 +100,11 @@
   min-height: 0;
   padding: clamp(8px, 1.1vw, 16px);
   border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, rgba(92, 18, 56, 0.6), rgba(46, 6, 26, 0.75));
+  background: linear-gradient(180deg, rgba(66, 11, 19, 0.6), rgba(28, 3, 7, 0.75));
   border: 1px solid var(--color-border-gold);
   box-shadow:
     0 30px 70px rgba(0, 0, 0, 0.5),
-    inset 0 0 40px rgba(192, 60, 122, 0.15);
+    inset 0 0 40px rgba(126, 25, 38, 0.15);
 }
 
 /* --category-count and --row-count are set by board.js from questions.js */
@@ -126,7 +126,7 @@
   padding: 0.5em 0.6em;
   text-align: center;
   border-radius: var(--radius-md);
-  background: linear-gradient(180deg, #8f2459, #5c1238);
+  background: linear-gradient(180deg, #61131d, #420b13);
   border: 1px solid var(--color-border-gold);
   box-shadow:
     0 6px 16px rgba(0, 0, 0, 0.35),
@@ -157,11 +157,11 @@
   border: 1px solid rgba(255, 227, 163, 0.35);
   background:
     radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.18), transparent 60%),
-    linear-gradient(180deg, #d04a88 0%, var(--color-green-mid) 45%, var(--color-green-dark) 100%);
+    linear-gradient(180deg, #932634 0%, var(--color-green-mid) 45%, var(--color-green-dark) 100%);
   box-shadow:
     0 6px 14px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -6px 14px rgba(64, 8, 36, 0.35);
+    inset 0 -6px 14px rgba(41, 5, 10, 0.35);
   transition:
     transform 0.22s var(--ease-out),
     box-shadow 0.22s ease,
@@ -187,7 +187,7 @@
   letter-spacing: 0.04em;
   color: var(--color-gold-light);
   text-shadow:
-    0 2px 0 rgba(66, 9, 38, 0.8),
+    0 2px 0 rgba(47, 6, 11, 0.8),
     0 0 16px rgba(244, 199, 106, 0.45);
 }
 
@@ -205,9 +205,9 @@
     filter: brightness(1.08);
     box-shadow:
       0 12px 24px rgba(0, 0, 0, 0.4),
-      0 0 26px rgba(224, 96, 154, 0.6),
+      0 0 26px rgba(165, 51, 66, 0.6),
       inset 0 1px 0 rgba(255, 255, 255, 0.35),
-      inset 0 -6px 14px rgba(64, 8, 36, 0.35);
+      inset 0 -6px 14px rgba(41, 5, 10, 0.35);
   }
 }
 
@@ -245,18 +245,18 @@
 /* ANSWERED — already played, can't be picked again */
 .tile[data-state="answered"] {
   cursor: default;
-  border-color: rgba(248, 198, 218, 0.12);
-  background: linear-gradient(180deg, #4d1030, #3f0b26);
+  border-color: rgba(220, 181, 186, 0.12);
+  background: linear-gradient(180deg, #390c12, #2b080d);
   box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.5);
   animation: tile-retire 0.5s var(--ease-out);
 }
 
 .tile[data-state="answered"]::before {
-  border-color: rgba(248, 198, 218, 0.07);
+  border-color: rgba(220, 181, 186, 0.07);
 }
 
 .tile[data-state="answered"] .tile__value {
-  color: rgba(248, 198, 218, 0.2);
+  color: rgba(220, 181, 186, 0.2);
   text-shadow: none;
 }
 
@@ -267,7 +267,7 @@
   font-weight: 700;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgba(248, 198, 218, 0.4);
+  color: rgba(220, 181, 186, 0.4);
 }
 
 @keyframes tile-select {
@@ -359,7 +359,7 @@
   height: 4px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(248, 198, 218, 0.15);
+  background: rgba(220, 181, 186, 0.15);
 }
 
 .progress__bar {

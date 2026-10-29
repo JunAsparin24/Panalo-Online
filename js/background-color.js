@@ -5,7 +5,7 @@
    Around the wheel = the color, toward the middle = paler,
    the slider = darker / brighter. The background's shades
    (the --stage-* colors in style.css) are all worked out from
-   the one picked color. "Reset" goes back to the pink.
+   the one picked color. "Reset" goes back to the red.
 
    The choice is remembered in this browser.
    ========================================================= */
@@ -20,10 +20,10 @@ const colorBrightness = document.getElementById("color-brightness");
 const colorResetButton = document.getElementById("color-reset");
 const colorDoneButton = document.getElementById("color-done");
 
-// The pink the game starts with, as hue / saturation / lightness
-const DEFAULT_BACKGROUND = { hue: 333, saturation: 52, lightness: 47 };
+// The red the game starts with (#711a26), as hue / saturation / lightness
+const DEFAULT_BACKGROUND = { hue: 352, saturation: 63, lightness: 27 };
 
-let backgroundColor = loadBackgroundColor(); // null = the original pink
+let backgroundColor = loadBackgroundColor(); // null = the original red
 let isDraggingWheel = false;
 
 /* ---------- Applying a color ---------- */
@@ -37,7 +37,7 @@ function applyBackgroundColor() {
   const names = ["--stage-top", "--stage-main", "--stage-mid", "--stage-bottom", "--stage-deep", "--stage-glow", "--stage-glow-light"];
 
   if (!backgroundColor) {
-    names.forEach((name) => root.removeProperty(name)); // back to style.css's pink
+    names.forEach((name) => root.removeProperty(name)); // back to style.css's red
   } else {
     const { hue, saturation: s, lightness: l } = backgroundColor;
     root.setProperty("--stage-top", hsl(hue, Math.min(100, s + 15), l + 18));
